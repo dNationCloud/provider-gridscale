@@ -21,8 +21,8 @@ import (
 	"github.com/pkg/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	v1alpha1 "github.com/upbound/upjet-provider-template/apis/null/v1alpha1"
-	features "github.com/upbound/upjet-provider-template/internal/features"
+	v1alpha1 "github.com/dNationCloud/provider-gridscale/apis/null/v1alpha1"
+	features "github.com/dNationCloud/provider-gridscale/internal/features"
 )
 
 // Setup adds a controller that reconciles Resource managed resources.
