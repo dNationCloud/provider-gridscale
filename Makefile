@@ -12,7 +12,8 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 
 export TERRAFORM_PROVIDER_SOURCE ?= gridscale/gridscale
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/gridscale/terraform-provider-gridscale
-export TERRAFORM_PROVIDER_VERSION ?= 1.26.0 # TODO: 1.27.0 not yet in https://releases.hashicorp.com/terraform-provider-gridscale
+# TODO: 1.27.0 not yet in https://releases.hashicorp.com/terraform-provider-gridscale
+export TERRAFORM_PROVIDER_VERSION ?= 1.26.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-gridscale
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-gridscale_v1.26.0
@@ -179,7 +180,7 @@ CROSSPLANE_NAMESPACE = upbound-system
 # This target requires the following environment variables to be set:
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test
 #   To ensure the proper functioning of the end-to-end test resource pre-deletion hook, it is crucial to arrange your resources appropriately. 
-#   You can check the basic implementation here: https://github.com/crossplane/uptest/blob/main/internal/templates/03-delete.yaml.tmpl.
+#   You can check the basic implementation here: https://github.com/crossplane/uptest/blob/main/internal/script from the repository root to prepare the code.s/03-delete.yaml.tmpl.
 # - UPTEST_CLOUD_CREDENTIALS (optional), multiple sets of AWS IAM User credentials specified as key=value pairs.
 #   The support keys are currently `DEFAULT` and `PEER`. So, an example for the value of this env. variable is:
 #   DEFAULT='[default]
