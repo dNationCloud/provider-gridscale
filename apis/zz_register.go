@@ -10,7 +10,7 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/dNationCloud/provider-gridscale/apis/null/v1alpha1"
+	v1alpha1 "github.com/dNationCloud/provider-gridscale/apis/gridscale/v1alpha1"
 	v1alpha1apis "github.com/dNationCloud/provider-gridscale/apis/v1alpha1"
 	v1beta1 "github.com/dNationCloud/provider-gridscale/apis/v1beta1"
 )

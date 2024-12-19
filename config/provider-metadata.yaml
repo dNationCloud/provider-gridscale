@@ -1,40 +1,1418 @@
-name: hashicorp/null
+name: gridscale/gridscale
 resources:
-    null_resource:
+    ISO Image:
         subCategory: ""
-        description: The null_resource resource implements the standard resource lifecycle but takes no further action. On Terraform 1.4 and later, use the terraform_data resource type https://developer.hashicorp.com/terraform/language/resources/terraform-data instead. The triggers argument allows specifying an arbitrary set of values that, when changed, will cause the resource to be replaced.
-        name: null_resource
-        title: null_resource Resource - terraform-provider-null
+        description: Manages an ISO Image in Gridscale.
+        name: ISO Image
+        title: ISO Image
+        argumentDocs:
+            bootdevice: '- True if the ISO Image is a boot device of this server.'
+            capacity: '- The capacity of a storage/ISO Image/ISO Image/snapshot in GB.'
+            change_time: '- The date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the object was initially created.'
+            current_price: '- Defines the price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            description: '- Description of the template.'
+            id: '- The UUID of the ISO Image.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The human-readable name of the location. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            location_uuid: '- The location this object is placed.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            object_name: '- Name of the server.'
+            object_uuid: '- The object UUID or id of the server.'
+            private: '- The object is private, the value will be true. Otherwise the value will be false.'
+            server: '- The information about servers which are related to this ISO Image.'
+            source_url: '- (Required) Contains the source URL of the ISO Image that it was originally fetched from.'
+            status: '- Status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Total minutes the object has been running.'
+            version: '- The version of the ISO Image.'
+        importStatements: []
+    gridscale_firewall:
+        subCategory: ""
+        description: Manages a firewall in gridscale.
+        name: gridscale_firewall
+        title: firewall
         examples:
-            - name: cluster
+            - name: foo
               manifest: |-
                 {
-                  "connection": [
+                  "name": "example-firewall",
+                  "rules_v4_in": [
                     {
-                      "host": "${element(aws_instance.cluster[*].public_ip, 0)}"
+                      "action": "drop",
+                      "comment": "some comments",
+                      "dst_port": "20:80",
+                      "order": 0,
+                      "protocol": "tcp"
                     }
                   ],
-                  "provisioner": {
-                    "remote-exec": [
-                      {
-                        "inline": [
-                          "bootstrap-cluster.sh ${join(\" \",\n      aws_instance.cluster[*].private_ip)}"
-                        ]
-                      }
-                    ]
-                  },
-                  "triggers": {
-                    "cluster_instance_ids": "${join(\",\", aws_instance.cluster[*].id)}"
-                  }
+                  "rules_v6_in": [
+                    {
+                      "action": "drop",
+                      "comment": "some comments",
+                      "dst_port": "2000:3000",
+                      "order": 0,
+                      "protocol": "tcp"
+                    }
+                  ],
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+        argumentDocs:
+            action: '- (Required) This defines what the firewall will do. Either accept or drop.'
+            change_time: '- The date and time of the last object change.'
+            comment: '- (Optional) Comment.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the object was initially created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            description: '- Description of the firewall.'
+            dst_cidr: '- (Optional) Either an IPv4/6 address or and IP Network in CIDR format. If this field is empty then this service has access to all IPs.'
+            dst_port: '- (Optional) A Number between 1 and 65535, port ranges are separated by a colon for FTP.'
+            id: '- The UUID of the firewall.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            location_name: '- The human-readable name of the location. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network: '- The information about networks which are related to this firewall.'
+            network_name: '- Name of the network.'
+            network_uuid: '- The object UUID or id of the network.'
+            object_name: '- Name of the firewall.'
+            object_uuid: '- The object UUID or id of the firewall.'
+            order: '- (Required) The order at which the firewall will compare packets against its rules. A packet will be compared against the first rule, it will either allow it to pass or block it and it won''t be matched against any other rules. However, if it does no match the rule, then it will proceed onto rule 2. Packets that do not match any rules are blocked by default (Only for inbound).'
+            order.action: '- (Required) This defines what the firewall will do. Either accept or drop.'
+            order.comment: '- (Optional) Comment.'
+            order.dst_cidr: '- (Optional) Either an IPv4/6 address or and IP Network in CIDR format. If this field is empty then this service has access to all IPs.'
+            order.dst_port: '- (Optional) A Number between 1 and 65535, port ranges are separated by a colon for FTP.'
+            order.protocol: '- (Required) Either ''udp'' or ''tcp''.'
+            order.src_cidr: '- (Optional) Either an IPv4/6 address or and IP Network in CIDR format. If this field is empty then this service has access to all IPs.'
+            order.src_port: '- (Optional) A Number between 1 and 65535, port ranges are separated by a colon for FTP.'
+            private: '- The object is private, the value will be true. Otherwise the value will be false.'
+            protocol: '- (Required) Either ''udp'' or ''tcp''.'
+            rules_v4_in: '- (Optional*) Firewall template rules for inbound traffic - covers ipv4 addresses.'
+            rules_v4_out: '- (Optional*) Firewall template rules for outbound traffic - covers ipv4 addresses.'
+            rules_v6_in: '- (Optional*) Firewall template rules for inbound traffic - covers ipv6 addresses.'
+            rules_v6_out: '- (Optional*) Firewall template rules for outbound traffic - covers ipv6 addresses.'
+            src_cidr: '- (Optional) Either an IPv4/6 address or and IP Network in CIDR format. If this field is empty then this service has access to all IPs.'
+            src_port: '- (Optional) A Number between 1 and 65535, port ranges are separated by a colon for FTP.'
+            status: '- Status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+        importStatements: []
+    gridscale_ipv4:
+        subCategory: ""
+        description: Manages an IPv4 address in gridscale.
+        name: gridscale_ipv4
+        title: gridscale_ipv4
+        examples:
+            - name: terra-ipv4-test
+              manifest: |-
+                {
+                  "name": "terra-test",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+        argumentDocs:
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            current_price: '- The price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            delete_block: '- Defines if the object is administratively blocked. If true, it can not be deleted by the user.'
+            failover: '- (Optional) Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.'
+            ip: '- Defines the IP address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The location name.'
+            location_uuid: '- See Argument Reference above.'
+            name: '- (Optional) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            prefix: '- The network address and the subnet.'
+            reverse_dns: '- (Optional) Defines the reverse DNS entry for the IP address (PTR Resource Record).'
+            status: '- status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- The amount of minutes the IP address has been in use.'
+        importStatements: []
+    gridscale_ipv6:
+        subCategory: ""
+        description: Manages an IPv6 address in gridscale.
+        name: gridscale_ipv6
+        title: gridscale_ipv6
+        examples:
+            - name: terra-ipv6-test
+              manifest: |-
+                {
+                  "name": "terra-test",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+        argumentDocs:
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            current_price: '- The price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            delete_block: '- Defines if the object is administratively blocked. If true, it can not be deleted by the user.'
+            failover: '- (Optional) Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.'
+            ip: '- Defines the IP address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The location name.'
+            location_uuid: '- The location this resource is placed. The location of a resource is determined by it''s project.'
+            name: '- (Optional) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            prefix: '- The network address and the subnet.'
+            reverse_dns: '- (Optional) Defines the reverse DNS entry for the IP address (PTR Resource Record).'
+            status: '- status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- The amount of minutes the IP address has been in use.'
+        importStatements: []
+    gridscale_k8s:
+        subCategory: ""
+        description: Manages a k8s cluster in gridscale.
+        name: gridscale_k8s
+        title: gridscale_k8s
+        examples:
+            - name: k8s-test
+              manifest: |-
+                {
+                  "name": "test",
+                  "node_pool": [
+                    {
+                      "cores": 1,
+                      "memory": 2,
+                      "name": "my_node_pool",
+                      "node_count": 2,
+                      "rocket_storage": 90,
+                      "storage": 10,
+                      "storage_type": "storage_insane"
+                    }
+                  ],
+                  "release": "1.26"
+                }
+        argumentDocs:
+            change_time: '- Defines the date and time of the last object change.'
+            cluster_cidr: '- (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).'
+            cluster_traffic_encryption: '- Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.'
+            cores: '- Cores per worker node.'
+            create: '- (Default value is "45m" - 45 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            delete: '- (Default value is "45m" - 45 minutes) Used for deleting a resource.'
+            gsk_version: '- (Optional) The gridscale''s Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.'
+            k8s_private_network_uuid: '- Private network UUID which k8s nodes are attached to. It can be used to attach other PaaS/VMs.'
+            kubeconfig: '- The kubeconfig file content of the k8s cluster.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            memory: '- Memory per worker node (in GiB).'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- DEPRECATED  Network UUID containing security zone, which is linked to the k8s cluster.'
+            node_count: '- Number of worker nodes.'
+            node_pool: '- (Required) Node pool''s specification. NOTE: The node pool''s specification is not yet mutable (except node_count).'
+            oidc_ca_pem: '- (Optional) Custom CA from customer in pem format as string.'
+            oidc_client_id: '- (Optional) A client ID that all tokens must be issued for.'
+            oidc_enabled: '- (Optional) Enable OIDC for the k8s cluster.'
+            oidc_groups_claim: '- (Optional) JWT claim to use as the user''s group.'
+            oidc_groups_prefix: '- (Optional) Prefix prepended to group claims to prevent clashes with existing names (such as system: groups). For example, the value oidc: will create group names like oidc:engineering and oidc:infra.'
+            oidc_issuer_url: '- (Optional) URL of the provider that allows the API server to discover public signing keys. Only URLs that use the https:// scheme are accepted.'
+            oidc_required_claim: '- (Optional) A key=value pair that describes a required claim in the ID Token. Multiple claims can be set like this: key1=value1,key2=value2.'
+            oidc_signing_algs: '- (Optional)The signing algorithms accepted. Default is ''RS256''. Other option is ''RS512''.'
+            oidc_username_claim: '- (Optional) JWT claim to use as the user name.'
+            oidc_username_prefix: '- (Optional) Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn''t provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.'
+            release: '- (Optional) The Kubernetes release of this instance. Define which release will be used to create the cluster. For convenience, please use gscloud to get the list of available releases. NOTE: Either gsk_version or release is set at a time.'
+            rocket_storage: '- Rocket storage per worker node (in GiB).'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) Security zone UUID linked to the Kubernetes resource. If security_zone_uuid is not set, the default security zone will be created (if it doesn''t exist) and linked. A change of this argument necessitates the re-creation of the resource.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that k8s service uses. The service_template_uuid may not relate to release, if service_template_uuid/release is updated outside of terraform (e.g. the k8s service is upgraded by gridscale staffs).'
+            status: '- status indicates the status of the object.'
+            storage: '- Storage per worker node (in GiB).'
+            storage_type: '- Storage type (one of storage, storage_high, storage_insane).'
+            surge_node: '- Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).'
+            update: '- (Default value is "45m" - 45 minutes) Used for updating a resource.'
+            usage_in_minutes: '- The amount of minutes the IP address has been in use.'
+        importStatements: []
+    gridscale_loadbalancer:
+        subCategory: ""
+        description: Manage a loadbalancer in gridscale.
+        name: gridscale_loadbalancer
+        title: loadbalancer
+        examples:
+            - name: foo
+              manifest: |-
+                {
+                  "algorithm": "leastconn",
+                  "backend_server": [
+                    {
+                      "host": "${gridscale_ipv4.server.ip}",
+                      "weight": 100
+                    }
+                  ],
+                  "forwarding_rule": [
+                    {
+                      "listen_port": 80,
+                      "mode": "http",
+                      "target_port": 80
+                    }
+                  ],
+                  "labels": [],
+                  "listen_ipv4_uuid": "${gridscale_ipv4.lb.id}",
+                  "listen_ipv6_uuid": "${gridscale_ipv6.lb.id}",
+                  "name": "test-lb",
+                  "redirect_http_to_https": false,
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+              references:
+                backend_server.host: gridscale_ipv4.server.ip
+                listen_ipv4_uuid: gridscale_ipv4.lb.id
+                listen_ipv6_uuid: gridscale_ipv6.lb.id
+        argumentDocs:
+            algorithm: '- (Required) The algorithm used to process requests. Accepted values: roundrobin/leastconn.'
+            backend_server: '- (Required) The servers that the load balancer can communicate with.'
+            certificate_uuid: '- (Optional) The UUID of a custom certificate.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            forwarding_rule: '- (Required) The forwarding rules of the load balancer.'
+            host: '- (Required) A valid domain or an IP address of a server.'
+            id: '- The UUID of the load balancer.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            letsencrypt_ssl: '- (Optional) A valid domain name that points to the loadbalancer''s IP address.'
+            listen_ipv4_uuid: '- (Required) The UUID of the IPv4 address the load balancer will listen to for incoming requests.'
+            listen_ipv6_uuid: '- (Required) The UUID of the IPv6 address the load balancer will listen to for incoming requests.'
+            listen_port: '- (Required) Specifies the entry port of the load balancer.'
+            location_uuid: '- The location this load balancer is placed. The location of a resource is determined by it''s project.'
+            mode: '- (Required) Supports HTTP and TCP mode. Valid values: http, tcp.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            proxy_protocol: '- (Optional) The proxy protocol version. The proxy protocol is disabled by default and the valid version is either v1 or v2.'
+            redirect_http_to_https: '- (Required) Whether the load balancer is forced to redirect requests from HTTP to HTTPS.'
+            status: '- The status of the load balancer.'
+            target_port: '- (Required) Specifies the exit port that the load balancer uses to forward the traffic to the backend server.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            weight: '- (Optional) The backend host weight. Default: 100.'
+        importStatements: []
+    gridscale_mariadb:
+        subCategory: ""
+        description: Manage a MariaDB service in gridscale.
+        name: gridscale_mariadb
+        title: gridscale_mariadb
+        examples:
+            - name: terra-mariadb-test
+              manifest: |-
+                {
+                  "mariadb_binlog_format": "STATEMENT",
+                  "mariadb_default_time_zone": "Europe/Berlin",
+                  "mariadb_query_cache_limit": "2M",
+                  "mariadb_server_id": 2,
+                  "max_core_count": 20,
+                  "name": "my mariadb",
+                  "performance_class": "insane",
+                  "release": "10.5"
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this MariaDB service accepts connections.'
+            mariadb_binlog_format: '- (Optional) MariaDB parameter: Binary Logging Format. Default: "MIXED".'
+            mariadb_default_time_zone: '- (Optional) MariaDB parameter: Server Timezone. Default: UTC.'
+            mariadb_log_bin: '- (Optional) MariaDB parameter: Binary Logging. Default: false.'
+            mariadb_max_allowed_packet: '- (Optional) MariaDB parameter: Max Allowed Packet Size. Format: xM (where x is an integer, M stands for unit: k(kB), M(MB), G(GB)). Default: 64M.'
+            mariadb_max_connections: '- (Optional) MariaDB parameter: Max Connections. Default: 4000.'
+            mariadb_query_cache: '- (Optional) MariaDB parameter: Enable query cache. Default: true.'
+            mariadb_query_cache_limit: '- (Optional) MariaDB parameter: Query Cache Limit. Format: xM (where x is an integer, M stands for unit: k(kB), M(MB), G(GB)). Default: 1M.'
+            mariadb_query_cache_size: '- (Optional) MariaDB parameter: Query Cache Size. Format: xM (where x is an integer, M stands for unit: k(kB), M(MB), G(GB)). Default: 128M.'
+            mariadb_server_id: '- (Optional) MariaDB parameter: Server Id. Default: 1.'
+            mariadb_sql_mode: '- (Optional) MariaDB parameter: SQL Mode. Default: "NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO".'
+            max_core_count: '- (Optional) Maximum CPU core count. The MariaDB instance''s CPU core count will be autoscaled based on the workload. The number of cores stays between 1 and max_core_count.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the MariaDB instance.'
+            performance_class: '- (Required) Performance class of MariaDB service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            release: '- (Required) The MariaDB release of this instance. For convenience, please use gscloud to get the list of available MariaDB service releases.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that MariaDB service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the MariaDB instance.'
+        importStatements: []
+    gridscale_memcached:
+        subCategory: ""
+        description: Manage a Memcached service in gridscale
+        name: gridscale_memcached
+        title: gridscale_memcached
+        examples:
+            - name: terra-memcached-test
+              manifest: |-
+                {
+                  "labels": [
+                    "test"
+                  ],
+                  "max_core_count": 20,
+                  "name": "test",
+                  "performance_class": "standard",
+                  "release": "1.5"
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this Memcached service accepts connections.'
+            max_core_count: '- (Optional) Maximum CPU core count. The Memcached instance''s CPU core count will be autoscaled based on the workload. The number of cores stays between 1 and max_core_count.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the Memcached instance.'
+            performance_class: '- (Required) Performance class of Memcached service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            release: '- (Required) The Memcached release of this instance. For convenience, please use gscloud to get the list of available Memcached service releases.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that Memcached service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the Memcached instance.'
+        importStatements: []
+    gridscale_mysql:
+        subCategory: ""
+        description: Manage a MySQL service in gridscale.
+        name: gridscale_mysql
+        title: gridscale_mysql
+        examples:
+            - name: terra-mysql-test
+              manifest: |-
+                {
+                  "max_core_count": 20,
+                  "mysql_binlog_format": "STATEMENT",
+                  "mysql_default_time_zone": "Europe/Berlin",
+                  "mysql_query_cache_limit": "2M",
+                  "mysql_server_id": 2,
+                  "name": "my mysql",
+                  "performance_class": "insane",
+                  "release": "5.7"
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this mysql service accepts connections.'
+            max_core_count: '- (Optional) Maximum CPU core count. The mysql instance''s CPU core count will be autoscaled based on the workload. The number of cores stays between 1 and max_core_count.'
+            mysql_binlog_format: '- (Optional) mysql parameter: Binary Logging Format. Default: "ROW".'
+            mysql_default_time_zone: '- (Optional) mysql parameter: Server Timezone. Default: UTC.'
+            mysql_log_bin: '- (Optional) mysql parameter: Binary Logging. Default: false.'
+            mysql_max_allowed_packet: '- (Optional) mysql parameter: Max Allowed Packet Size. Format: xM (where x is an integer, M stands for unit: k(kB), M(MB), G(GB)). Default: 64M.'
+            mysql_max_connections: '- (Optional) mysql parameter: Max Connections. Default: 4000.'
+            mysql_query_cache: '- (Optional) mysql parameter: Enable query cache. Default: true.'
+            mysql_query_cache_limit: '- (Optional) mysql parameter: Query Cache Limit. Format: xM (where x is an integer, M stands for unit: k(kB), M(MB), G(GB)). Default: 1M.'
+            mysql_query_cache_size: '- (Optional) mysql parameter: Query Cache Size. Format: xM (where x is an integer, M stands for unit: k(kB), M(MB), G(GB)). Default: 128M.'
+            mysql_server_id: '- (Optional) mysql parameter: Server Id. Default: 1.'
+            mysql_sql_mode: '- (Optional) mysql parameter: SQL Mode. Default: "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION".'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the mysql instance.'
+            performance_class: '- (Required) Performance class of mysql service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            release: '- (Required) The mysql release of this instance. For convenience, please use gscloud to get the list of available mysql service releases.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that mysql service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the mysql instance.'
+        importStatements: []
+    gridscale_mysql8_0:
+        subCategory: ""
+        description: Manage a MySQL 8.0 service in gridscale.
+        name: gridscale_mysql8_0
+        title: gridscale_mysql8_0
+        examples:
+            - name: terra-mysql-test
+              manifest: |-
+                {
+                  "max_core_count": 20,
+                  "mysql_default_time_zone": "Europe/Berlin",
+                  "name": "my mysql",
+                  "performance_class": "insane",
+                  "release": "8.0"
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this mysql service accepts connections.'
+            max_core_count: '- (Optional) Maximum CPU core count. The mysql instance''s CPU core count will be autoscaled based on the workload. The number of cores stays between 1 and max_core_count.'
+            mysql_default_time_zone: '- (Optional) mysql parameter: Server Timezone. Default: UTC.'
+            mysql_max_allowed_packet: '- (Optional) mysql parameter: Max Allowed Packet Size. Format: xM (where x is an integer, M stands for unit: k(kB), M(MB), G(GB)). Default: 64M.'
+            mysql_max_connections: '- (Optional) mysql parameter: Max Connections. Default: 4000.'
+            mysql_sql_mode: '- (Optional) mysql parameter: SQL Mode. Default: "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION".'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the mysql instance.'
+            performance_class: '- (Required) Performance class of mysql service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            release: '- (Required) The mysql release of this instance. For convenience, please use gscloud to get the list of available mysql service releases.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that mysql service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the mysql instance.'
+        importStatements: []
+    gridscale_network:
+        subCategory: ""
+        description: Manages a network in gridscale.
+        name: gridscale_network
+        title: gridscale_network
+        examples:
+            - name: networkname
+              manifest: |-
+                {
+                  "dhcp_active": true,
+                  "dhcp_dns": "192.168.121.2",
+                  "dhcp_gateway": "192.168.121.1",
+                  "dhcp_range": "192.168.121.0/27",
+                  "dhcp_reserved_subnet": [
+                    "192.168.121.0/31"
+                  ],
+                  "name": "terraform-network",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+        argumentDocs:
+            auto_assigned_servers: '- A list of server UUIDs with the corresponding IPs that are designated by the DHCP server.'
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            delete_block: '- If deleting this network is allowed.'
+            dhcp_active: '- (Optional) Enable DHCP.'
+            dhcp_dns: '- (Optional) The IP address reserved and communicated by the dhcp service to be the default gateway.'
+            dhcp_gateway: '- (Optional) The general IP Range configured for this network (/24 for private networks). If it is not set, gridscale internal default range is used.'
+            dhcp_range: '- (Optional, Computed) DHCP DNS. If it is not set and DHCP is enabled, dhcp_range will be set by the backend automatically.'
+            dhcp_reserved_subnet: '- (Optional) Subrange within the IP range.'
+            ip: '- IP which is assigned to the server.'
+            l2security: '- (Optional) Defines information about MAC spoofing protection (filters layer2 and ARP traffic based on MAC source). It can only be (de-)activated on a private network - the public network always has l2security enabled. It will be true if the network is public, and false if the network is private.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The location name.'
+            location_uuid: '- The location this network is placed. The location of a resource is determined by it''s project.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_type: '- The type of this network, can be mpls, breakout or network.'
+            pinned_servers: '- A list of server UUIDs with the corresponding IPs that are designated by the user.'
+            public_net: '- Is the network public or not.'
+            server_uuid: '- UUID of the server.'
+            status: '- status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+        importStatements: []
+    gridscale_paas:
+        subCategory: ""
+        description: Manages a PaaS in gridscale.
+        name: gridscale_paas
+        title: gridscale_paas
+        examples:
+            - name: terra-paas-test
+              manifest: |-
+                {
+                  "name": "terra-paas-test",
+                  "service_template_uuid": "f9625726-5ca8-4d5c-b9bd-3257e1e2211a",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Time of the creation.'
+            current_price: '- Current price of PaaS service.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            limit: '- (Required) The maximum number of the specific resource your service can use.'
+            listen_port: '- Ports that PaaS service listens to.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            param: '- (Required) Name of parameter.'
+            parameter: '- See Argument Reference above.'
+            parameters: '- (Optional) Contains the service parameters for the service.'
+            password: '- Password for PaaS service.'
+            resource: '- (Required) The name of the resource you would like to cap.'
+            resource_limit: '- (Optional) A list of service resource limits..'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- (Required) The template used to create the service.'
+            service_template_uuid_computed: '- Template that PaaS service uses. The service_template_uuid_computed will be different from service_template_uuid, when service_template_uuid is updated outside of terraform.'
+            status: '- Current status of PaaS service.'
+            type: '- (Required) Primitive type of the parameter: bool, int (better use float for int case), float, string.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minute: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service.'
+            value: '- (Required) Value of the corresponding parameter.'
+        importStatements: []
+    gridscale_paas_securityzone:
+        subCategory: ""
+        description: Manages a security zone in gridscale.
+        name: gridscale_paas_securityzone
+        title: securityzone
+        examples:
+            - name: foo
+              manifest: |-
+                {
+                  "name": "test",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+        argumentDocs:
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- Defines the date and time the object was initially created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            id: '- The UUID of the security zone.'
+            labels: '- List of labels.'
+            location_country: '- The human-readable name of the location''s country.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The human-readable name of the location.'
+            location_uuid: '- (Optional) The location this object is placed.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            relations: '- List of PaaS services'' UUIDs relating to the security zone.'
+            status: '- Status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+        importStatements: []
+    gridscale_postgresql:
+        subCategory: ""
+        description: Manage a PostgreSQL service in gridscale.
+        name: gridscale_postgresql
+        title: gridscale_postgresql
+        examples:
+            - name: terra-postgres-test
+              manifest: |-
+                {
+                  "labels": [
+                    "test"
+                  ],
+                  "max_core_count": 20,
+                  "name": "test",
+                  "performance_class": "standard",
+                  "release": "13"
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this PostgreSQL service accepts connections.'
+            max_core_count: '- (Optional) Maximum CPU core count. The PostgreSQL instance''s CPU core count will be autoscaled based on the workload. The number of cores stays between 1 and max_core_count.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the PostgreSQL instance.'
+            performance_class: '- (Required) Performance class of PostgreSQL service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            pgaudit_log_access_key: '- (Optional) Access key used to authenticate against Object Storage server.'
+            pgaudit_log_bucket: '- (Optional) Object Storage bucket to upload audit logs to. For pgAudit to be enabled these additional parameters need to be configured: pgaudit_log_server_url, pgaudit_log_access_key, pgaudit_log_secret_key.'
+            pgaudit_log_rotation_frequency: '- (Optional) Rotation (in minutes) for audit logs. Logs are uploaded to Object Storage once rotated. Default is 5 minutes.'
+            pgaudit_log_secret_key: '- (Optional) Secret key used to authenticate against Object Storage server.'
+            pgaudit_log_server_url: '- (Optional) Object Storage server URL the bucket is located on.'
+            release: '- (Required) The PostgreSQL release of this instance. For convenience, please use gscloud to get the list of available PostgreSQL service releases.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_uuid: '- PaaS service template that PostgreSQL service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the PostgreSQL instance.'
+        importStatements: []
+    gridscale_redis_cache:
+        subCategory: ""
+        description: Manage a Redis cache service in gridscale.
+        name: gridscale_redis_cache
+        title: gridscale_redis_cache
+        examples:
+            - name: terra-redis-cache-test
+              manifest: |-
+                {
+                  "labels": [
+                    "test"
+                  ],
+                  "name": "test",
+                  "performance_class": "standard",
+                  "release": "5.0"
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this Redis cache service accepts connections.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the Redis cache instance.'
+            performance_class: '- (Required) Performance class of Redis cache service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            release: '- (Required) The Redis cache release of this instance. For convenience, please use gscloud to get the list of available Redis cache service releases.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that Redis cache service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the Redis cache instance.'
+        importStatements: []
+    gridscale_redis_store:
+        subCategory: ""
+        description: Manage a Redis store service in gridscale.
+        name: gridscale_redis_store
+        title: gridscale_redis_store
+        examples:
+            - name: terra-redis-store-test
+              manifest: |-
+                {
+                  "labels": [
+                    "test"
+                  ],
+                  "name": "test",
+                  "performance_class": "standard",
+                  "release": "5.0"
+                }
+        argumentDocs:
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this Redis store service accepts connections.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the Redis store instance.'
+            performance_class: '- (Required) Performance class of Redis store service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            release: '- (Required) The Redis store release of this instance. For convenience, please use gscloud to get the list of available Redis store service releases.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that Redis store service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the Redis store instance.'
+        importStatements: []
+    gridscale_server:
+        subCategory: ""
+        description: Manages a server in gridscale.
+        name: gridscale_server
+        title: gridscale_server
+        examples:
+            - name: terra-server-test
+              manifest: |-
+                {
+                  "cores": 2,
+                  "ipv4": "${gridscale_ipv4.terra-ipv4-test.id}",
+                  "isoimage": "9be3e0a3-42ac-4207-8887-3383c405724d",
+                  "memory": 1,
+                  "name": "terra-server-test",
+                  "network": [
+                    {
+                      "bootdevice": true,
+                      "object_uuid": "${gridscale_network.terra-network-test.id}"
+                    },
+                    {
+                      "object_uuid": "${gridscale_network.terra-network-test-2.id}"
+                    }
+                  ],
+                  "storage": [
+                    {
+                      "object_uuid": "${gridscale_storage.terra-storage-test.id}"
+                    }
+                  ],
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+              references:
+                ipv4: gridscale_ipv4.terra-ipv4-test.id
+                network.object_uuid: gridscale_network.terra-network-test-2.id
+                storage.object_uuid: gridscale_storage.terra-storage-test.id
+            - name: terra-server-test
+              manifest: |-
+                {
+                  "cores": 2,
+                  "ipv4": "${gridscale_ipv4.terra-ipv4-test.id}",
+                  "isoimage": "9be3e0a3-42ac-4207-8887-3383c405724d",
+                  "memory": 1,
+                  "name": "terra-server-test",
+                  "network": [
+                    {
+                      "object_uuid": "${gridscale_network.terra-network-test.id}",
+                      "rules_v4_in": [
+                        {
+                          "action": "accept",
+                          "comment": "ssh",
+                          "dst_port": "22",
+                          "order": 0,
+                          "protocol": "tcp"
+                        }
+                      ],
+                      "rules_v6_in": [
+                        {
+                          "action": "accept",
+                          "comment": "ssh",
+                          "dst_port": "22",
+                          "order": 1,
+                          "protocol": "tcp"
+                        }
+                      ]
+                    },
+                    {
+                      "object_uuid": "${gridscale_network.terra-network-test-2.id}"
+                    }
+                  ],
+                  "storage": [
+                    {
+                      "object_uuid": "${gridscale_storage.terra-storage-test.id}"
+                    }
+                  ],
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+              references:
+                ipv4: gridscale_ipv4.terra-ipv4-test.id
+                network.object_uuid: gridscale_network.terra-network-test-2.id
+                storage.object_uuid: gridscale_storage.terra-storage-test.id
+        argumentDocs:
+            action: '- (Required) This defines what the firewall will do. Either accept or drop.'
+            auto_assigned_ip: '- DHCP IP which is automatically assigned to the server (if applicable).'
+            auto_recovery: '- (Optional) If the server should be auto-started in case of a failure (default=true).'
+            availability_zone: '- (Optional, Computed) Defines which Availability-Zone the Server is placed.'
+            bootdevice: '- True is the storage is a boot device.'
+            bus: '- The SCSI bus id. The SCSI defines transmission routes like Serial Attached SCSI (SAS), Fibre Channel and iSCSI. Each SCSI device is addressed via a specific number. Each SCSI bus can have multiple SCSI devices connected to it.'
+            capacity: '- Capacity of the storage (GB).'
+            change_time: '- Defines the date and time of the last object change.'
+            comment: '- (Optional) Comment.'
+            console_token: '- The token used by the panel to open the websocket VNC connection to the server console.'
+            controller: '- Defines the SCSI controller id. The SCSI defines transmission routes such as Serial Attached SCSI (SAS), Fibre Channel and iSCSI.'
+            cores: '- (Required) The number of server cores.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- Defines the date and time the object was initially created.'
+            current_price: '- The price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            dst_cidr: '- (Optional) Either an IPv4/6 address or and IP Network in CIDR format. If this field is empty then this service has access to all IPs.'
+            dst_port: '- (Optional) A Number between 1 and 65535, port ranges are separated by a colon for FTP.'
+            firewall_template_uuid: '- The UUID of firewall template.'
+            hardware_profile: '- (Optional, Computed) The hardware profile of the Server. Options are default, legacy, nested, cisco_csr, sophos_utm, f5_bigip and q35 at the moment of writing. If it is not set, the backend will set it by default. Check the official docs.'
+            hardware_profile_config: '- (Optional, Computed) Specifies the custom hardware settings for the virtual machine. Note: hardware_profile and hardware_profile_config parameters can''t be used at the same time. Note: If hardware_profile_config is set, all fields of hardware_profile_config MUST be set. Note 2: If hardware_profile_config is set, hardware_profile will be ignored (if it is set), and the future terraform apply will show the change of hardware_profile; therefore, you have better remove hardware_profile.'
+            hyperv_extensions: '- (Optional, Computed) Boolean.'
+            id: '- UUID of the server.'
+            ip: '- DHCP IP which is manually assigned to the server (if applicable).'
+            ipv4: '- (Optional) The UUID of the IPv4 address of the server. (***NOTE: The server will NOT automatically be connected to the public network; to give it access to the internet, please add server to the public network.)'
+            ipv6: '- (Optional) The UUID of the IPv6 address of the server. (***NOTE: The server will NOT automatically be connected to the public network; to give it access to the internet, please add server to the public network.)'
+            isoimage: '- (Optional) The UUID of an ISO image in gridscale. The server will automatically boot from the ISO if one was added. The UUIDs of ISO images can be found in the expert panel.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            last_used_template: '- Indicates the UUID of the last used template on this storage (inherited from snapshots).'
+            legacy: '- Legacy-Hardware emulation instead of virtio hardware. If enabled, hot-plugging cores, memory, storage, network, etc. will not work, but the server will most likely run every x86 compatible operating system. This mode comes with a performance penalty, as emulated hardware does not benefit from the virtio driver infrastructure.'
+            license_product_no: '- If a template has been used that requires a license key (e.g. Windows Servers) this shows the product_no of the license (see the /prices endpoint for more details).'
+            location_uuid: '- The location this server is placed. The location of a resource is determined by it''s project.'
+            lun: '- Is the common SCSI abbreviation of the Logical Unit Number. A lun is a unique identifier for a single disk or a composite of disks.'
+            mac: '- network_mac defines the MAC address of the network interface.'
+            machinetype: '- (Optional, Computed) Allowed values: "i440fx", "q35_bios", "q35_uefi".'
+            memory: '- (Required) The amount of server memory in GB.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            nested_virtualization: '- (Optional, Computed) Boolean.'
+            network: '- (Optional) Connects a network to the server. The network ordering of the server corresponds to the order of the networks in the server resource block.'
+            network.bootdevice: '- (Optional, Computed) Make this network the boot device. This can only be set for one network.'
+            network.firewall_template_uuid: '- (Optional) The UUID of firewall template.'
+            network.ip: '- (Optional) Manually assign DHCP IP to the server (if applicable).'
+            network.object_uuid: '- (Required) The object UUID or id of the network.'
+            network.ordering: '- DEPRECATED (Optional) Defines the ordering of the network interfaces. Lower numbers have lower PCI-IDs.'
+            network.rules_v4_in: '- (Optional) Firewall template rules for inbound traffic - covers ipv4 addresses.'
+            network.rules_v4_out: '- (Optional) Firewall template rules for outbound traffic - covers ipv4 addresses.'
+            network.rules_v6_in: '- (Optional) Firewall template rules for inbound traffic - covers ipv6 addresses.'
+            network.rules_v6_out: '- (Optional) Firewall template rules for outbound traffic - covers ipv6 addresses.'
+            network_model: '- (Optional, Computed) Allowed values: "e1000", "e1000e", "virtio", "vmxnet3".'
+            network_type: '- One of network, network_high, network_insane.'
+            object_name: '- Name of the storage.'
+            object_uuid: '- (Required) The object UUID or id of the storage.'
+            order: '- (Required) The order at which the firewall will compare packets against its rules. A packet will be compared against the first rule, it will either allow it to pass or block it and it won''t be matched against any other rules. However, if it does no match the rule, then it will proceed onto rule 2. Packets that do not match any rules are blocked by default (Only for inbound).'
+            ordering: '- DEPRECATED Defines the ordering of the network interfaces. Lower numbers have lower PCI-IDs.'
+            power: '- (Optional, Computed) The power state of the server. Set this to true to will boot the server, false will shut it down.'
+            protocol: '- (Required) Either ''udp'' or ''tcp''.'
+            rules_v4_in: '- Firewall template rules for inbound traffic - covers IPv4 addresses.'
+            rules_v4_out: '- Firewall template rules for outbound traffic - covers IPv4 addresses.'
+            rules_v6_in: '- Firewall template rules for inbound traffic - covers IPv6 addresses.'
+            rules_v6_out: '- Firewall template rules for outbound traffic - covers IPv6 addresses.'
+            serial_interface: '- (Optional, Computed) Boolean.'
+            server_renice: '- (Optional, Computed) Boolean.'
+            src_cidr: '- (Optional) Either an IPv4/6 address or and IP Network in CIDR format. If this field is empty then this service has access to all IPs.'
+            src_port: '- (Optional) A Number between 1 and 65535, port ranges are separated by a colon for FTP.'
+            status: '- Status indicates the status of the object.'
+            storage: '- (Optional) Connects a storage to the server. **NOTE: The first storage is always the boot device.'
+            storage_device: '- (Optional, Computed) Allowed values: "ide", "sata", "virtio_scsi", "virtio_block".'
+            storage_type: '- Indicates the speed of the storage. This may be (storage, storage_high or storage_insane).'
+            target: '- Defines the SCSI target ID. The target ID is a device (e.g. disk).'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes_cores: '- Total minutes of cores used.'
+            usage_in_minutes_memory: '- Total minutes of memory used.'
+            usb_controller: '- (Optional, Computed) Allowed values: "nec_xhci", "piix3_uhci".'
+            user_data_base64: '- (Optional, Computed) For system configuration on first boot. May contain cloud-config data or shell scripting, encoded as base64 string. Supported tools are cloud-init, Cloudbase-init, and Ignition.'
+        importStatements: []
+    gridscale_sqlserver:
+        subCategory: ""
+        description: Manage a MS SQL server service in gridscale.
+        name: gridscale_sqlserver
+        title: gridscale_sqlserver
+        examples:
+            - name: terra-sqlserver-test
+              manifest: |-
+                {
+                  "labels": [
+                    "test"
+                  ],
+                  "name": "test",
+                  "performance_class": "standard",
+                  "release": "2019"
+                }
+        argumentDocs:
+            backup_access_key: '- (Required) Access key used to authenticate against Object Storage server.'
+            backup_bucket: '- (Required) Object Storage bucket to upload backups to and restore backups from.'
+            backup_retention: '- (Optional) Retention (in seconds) for local originals of backups. (0 for immediate removal once uploaded to Object Storage (default), higher values for delayed removal after the given time and once uploaded to Object Storage).'
+            backup_secret_key: '- (Required) Secret key used to authenticate against Object Storage server.'
+            backup_server_url: '- (Optional, Default: "https://gos3.io/") Object Storage server URL the bucket is located on. Note: Currently, only object storage host "https://gos3.io/" is supported.'
+            change_time: '- Time of the last change.'
+            create: '- (Default value is "15m" - 15 minutes) Used for creating a resource.'
+            create_time: '- Date time this service has been created.'
+            delete: '- (Default value is "15m" - 15 minutes) Used for deleting a resource.'
+            host: '- Host address.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            listen_port: '- The port numbers where this MS SQL server service accepts connections.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            network_uuid: '- (Optional) The UUID of the network that the service is attached to.'
+            password: '- Password for PaaS service. It is used to connect to the MS SQL server instance.'
+            performance_class: '- (Required) Performance class of MS SQL server service. Available performance classes at the time of writing: standard, high, insane, ultra.'
+            release: '- (Required) The MS SQL server release of this instance. For convenience, please use gscloud to get the list of available MS SQL server service releases.'
+            s3_backup: '- (Optional) Allow backup/restore MS SQL server to/from a S3 bucket.'
+            security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) The UUID of the security zone that the service is attached to.'
+            service_template_category: '- The template service''s category used to create the service.'
+            service_template_uuid: '- PaaS service template that MS SQL server service uses.'
+            status: '- Current status of PaaS service.'
+            update: '- (Default value is "15m" - 15 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Number of minutes that PaaS service is in use.'
+            username: '- Username for PaaS service. It is used to connect to the MS SQL server instance.'
+        importStatements: []
+    gridscale_sshkey:
+        subCategory: ""
+        description: Manages an SSH public key in gridscale.
+        name: gridscale_sshkey
+        title: gridscale_sshkey
+        examples:
+            - name: sshkey-john
+              manifest: |-
+                {
+                  "name": "john's computer",
+                  "sshkey": "an ssh public key",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+        argumentDocs:
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            sshkey: '- (Required) This is the OpenSSH public key string (all key types are supported => ed25519, ecdsa, dsa, rsa, rsa1).'
+            status: '- status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+        importStatements: []
+    gridscale_ssl_certificate:
+        subCategory: ""
+        description: Manages a TLS/SSL certificate resource in gridscale.
+        name: gridscale_ssl_certificate
+        title: gridscale_ssl_certificate
+        examples:
+            - name: ssl-certificate-john
+              manifest: |-
+                {
+                  "leaf_certificate": "a public SSL of the SSL certificate",
+                  "name": "john's computer",
+                  "private_key": "a private-key of the SSL certificate",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
                 }
               dependencies:
-                aws_instance.cluster: |-
+                gridscale_loadbalancer.lb-john: |-
                     {
-                      "ami": "ami-0dcc1e21636832c5d",
-                      "count": 3,
-                      "instance_type": "m5.large"
+                      "algorithm": "leastconn",
+                      "backend_server": [
+                        {
+                          "host": "${gridscale_ipv4.server.ip}",
+                          "weight": 100
+                        }
+                      ],
+                      "forwarding_rule": [
+                        {
+                          "certificate_uuid": "${gridscale_ssl_certificate.ssl-certificate-john.id}",
+                          "listen_port": 80,
+                          "mode": "http",
+                          "target_port": 80
+                        }
+                      ],
+                      "labels": [],
+                      "listen_ipv4_uuid": "${gridscale_ipv4.lb.id}",
+                      "listen_ipv6_uuid": "${gridscale_ipv6.lb.id}",
+                      "name": "john's lb",
+                      "redirect_http_to_https": false,
+                      "timeouts": [
+                        {
+                          "create": "10m"
+                        }
+                      ]
                     }
         argumentDocs:
-            id: (String) This is set to a random value at create time.
-            triggers: (Map of String) A map of arbitrary strings that, when changed, will force the null resource to be replaced, re-running any associated provisioners.
+            certificate_chain: '- (Optional, Force New) The PEM-formatted full-chain between the certificate authority and the domain''s SSL certificate.'
+            change_time: '- Defines the date and time of the last object change.'
+            common_name: '- The common domain name of the SSL certificate.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the object was initially created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            fingerprints: '- Defines a list of unique identifiers generated from the MD5, SHA-1, and SHA-256 fingerprints of the certificate.'
+            labels: '- (Optional, Force New) List of labels in the format [ "label1", "label2" ].'
+            leaf_certificate: '- (Required, Force New) The PEM-formatted public SSL of the SSL certificate.'
+            md5: '- MD5 fingerprint of the certificate.'
+            name: '- (Required, Force New) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            not_valid_after: '- Defines the date after which the certificate is not valid.'
+            private_key: '- (Required, Force New) The PEM-formatted private-key of the SSL certificate.'
+            sha1: '- SHA1 fingerprint of the certificate.'
+            sha256: '- SHA256 fingerprint of the certificate.'
+            ssl_certificate: '- See Argument Reference above.'
+            status: '- status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+        importStatements: []
+    gridscale_storage:
+        subCategory: ""
+        description: Manages a storage in gridscale.
+        name: gridscale_storage
+        title: gridscale_storage
+        examples:
+            - name: storage-john
+              manifest: |-
+                {
+                  "capacity": 10,
+                  "name": "john's storage",
+                  "storage_type": "storage_high",
+                  "template": [
+                    {
+                      "hostname": "Ubuntu",
+                      "password": "${var.gridscale_password-john}",
+                      "password_type": "plain",
+                      "template_uuid": "4db64bfc-9fb2-4976-80b5-94ff43b1233a"
+                    }
+                  ],
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+              references:
+                template.password: var.gridscale_password-john
+        argumentDocs:
+            capacity: '- (Required) required (integer - minimum: 1 - maximum: 4096).'
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            current_price: '- The price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            hostname: '- (Optional) The hostname of the installed server (ignored for private templates and public windows templates).'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            last_used_template: '- Indicates the UUID of the last used template on this storage (inherited from snapshots).'
+            license_product_no: '- If a template has been used that requires a license key (e.g. Windows Servers) this shows the product_no of the license (see the /prices endpoint for more details).'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The location name.'
+            location_uuid: '- The location this storage is placed. The location of a resource is determined by it''s project.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            password: '- (Optional) The root (Linux) or Administrator (Windows) password to set for the installed storage. Valid only for public templates. The password has to be either plain-text or a crypt string (modular crypt format - MCF).'
+            password_type: '- (Optional) (one of plain, crypt) Required if password is set (ignored for private templates and public Windows templates).'
+            rollback_from_backup_uuid: '- (Optional) Rollback the storage from a specific storage backup.'
+            sshkeys: '- (Optional) (array of any - minItems: 0) Public Linux templates only! The UUIDs of SSH keys to be added for the root user.'
+            status: '- status indicates the status of the object.'
+            storage_type: '- (Optional) (one of storage, storage_high, storage_insane).'
+            storage_variant: '- (Optional) Storage variant (one of local or distributed). Default: "distributed".'
+            template: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            template_uuid: '- (Required) The UUID of a template. This can be found in the the page Template by clicking more on the template or by using a gridscale_template datasource.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- The amount of minutes the IP address has been in use.'
+        importStatements: []
+    gridscale_storage_clone:
+        subCategory: ""
+        description: Make a clone of an existing storage instance.
+        name: gridscale_storage_clone
+        title: gridscale_storage_clone
+        examples:
+            - name: storage-clone-john
+              manifest: |-
+                {
+                  "name": "john's storage clone",
+                  "source_storage_id": "${gridscale_storage.storage-clone-john.id}",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+              references:
+                source_storage_id: gridscale_storage.storage-clone-john.id
+              dependencies:
+                gridscale_storage.storage-john: |-
+                    {
+                      "capacity": 10,
+                      "name": "john's storage",
+                      "storage_type": "storage_high",
+                      "timeouts": [
+                        {
+                          "create": "10m"
+                        }
+                      ]
+                    }
+        argumentDocs:
+            capacity: '- (Optional) The default value is inherited from the source storage instance. A desired capacity is possible. Required (integer - minimum: 1 - maximum: 4096).'
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            current_price: '- The price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            last_used_template: '- Indicates the UUID of the last used template on this storage (inherited from snapshots).'
+            license_product_no: '- If a template has been used that requires a license key (e.g. Windows Servers) this shows the product_no of the license (see the /prices endpoint for more details).'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The location name.'
+            location_uuid: '- The location this resource is placed. The location of a resource is determined by it''s project.'
+            name: '- (Optional) The default value is inherited from the source storage instance. A desired name is possible. The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            source_storage_id: '- (Required) The ID of a storage instance which will be cloned.'
+            status: '- status indicates the status of the object.'
+            storage_type: '- (Optional) The default value is inherited from the source storage instance. A desired storage type is possible. (one of storage, storage_high, storage_insane).'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- The amount of minutes the IP address has been in use.'
+        importStatements: []
+    gridscale_storage_import:
+        subCategory: ""
+        description: Make a clone of an existing storage instance.
+        name: gridscale_storage_import
+        title: gridscale_storage_import
+        examples:
+            - name: foo
+              manifest: |-
+                {
+                  "capacity": 20,
+                  "name": "imported storage",
+                  "storage_backup_id": "xxx-xxx-xxx-xxx-xxx",
+                  "storage_type": "storage_high"
+                }
+        argumentDocs:
+            capacity: '- (Optional) The default value is inherited from the source storage instance. A desired capacity is possible. Required (integer - minimum: 1 - maximum: 4096).'
+            change_time: '- Defines the date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The time the object was created.'
+            current_price: '- The price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
+            last_used_template: '- Indicates the UUID of the last used template on this storage (inherited from snapshots).'
+            license_product_no: '- If a template has been used that requires a license key (e.g. Windows Servers) this shows the product_no of the license (see the /prices endpoint for more details).'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The location name.'
+            location_uuid: '- The location this resource is placed. The location of a resource is determined by it''s project.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            status: '- status indicates the status of the object.'
+            storage_backup_id: '- (Required) ID of the storage backup that will be used to create a new storage from.'
+            storage_type: '- (Optional) The default value is inherited from the source storage instance. A desired storage type is possible. (one of storage, storage_high, storage_insane).'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- The amount of minutes the IP address has been in use.'
+        importStatements: []
+    gridscale_template:
+        subCategory: ""
+        description: Manages a template in gridscale.
+        name: gridscale_template
+        title: template
+        examples:
+            - name: foo
+              manifest: |-
+                {
+                  "name": "newname",
+                  "snapshot_uuid": "${gridscale_snapshot.foo.id}",
+                  "timeouts": [
+                    {
+                      "create": "10m"
+                    }
+                  ]
+                }
+              references:
+                snapshot_uuid: gridscale_snapshot.foo.id
+              dependencies:
+                gridscale_snapshot.foo: |-
+                    {
+                      "name": "newname",
+                      "storage_uuid": "${gridscale_storage.foo.id}"
+                    }
+                gridscale_storage.foo: |-
+                    {
+                      "capacity": 1,
+                      "name": "newname"
+                    }
+        argumentDocs:
+            capacity: '- The capacity of a storage/ISO Image/template/snapshot in GB.'
+            change_time: '- The date and time of the last object change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the object was initially created.'
+            current_price: '- Defines the price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            description: '- Description of the template.'
+            distro: '- The OS distribution that the template contains.'
+            id: '- The UUID of the template.'
+            labels: '- (Optional) List of labels.'
+            license_product_no: '- If a template has been used that requires a license key (e.g. Windows Servers) this shows the product_no of the license (see the /prices endpoint for more details).'
+            location_country: '- Two digit country code (ISO 3166-2) of the location where this object is placed.'
+            location_iata: '- Uses IATA airport code, which works as a location identifier.'
+            location_name: '- The human-readable name of the location. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            location_uuid: '- The location this object is placed.'
+            name: '- (Required) The exact name of the template as show in the page Template.'
+            ostype: '- The operating system installed in the template.'
+            private: '- The object is private, the value will be true. Otherwise the value will be false.'
+            snapshot_uuid: '- (Required) Snapshot uuid for template.'
+            status: '- Status indicates the status of the object.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Total minutes the object has been running.'
+            version: '- The version of the template.'
+        importStatements: []
+    imported marketplace application:
+        subCategory: ""
+        description: Manages imported marketplace applications in Gridscale.
+        name: imported marketplace application
+        title: imported marketplace application
+        argumentDocs:
+            category: '- Category of marketplace application.'
+            change_time: '- The date and time of the last marketplace application change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the marketplace application was initially created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            id: '- The UUID of the marketplace application.'
+            import_unique_hash: '- (Required) Hash of a specific marketplace application that you want to import. A change of this argument necessitates the re-creation of the resource.'
+            is_application_owner: '- Whether the you are the owner of application or not.'
+            is_publish_global: '- Whether a template is published to other partner or not.'
+            is_publish_global_requested: '- Whether a partner wants their tenant template published to other partners.'
+            is_publish_requested: '- Whether the tenants want their template to be published or not.'
+            is_published: '- Whether the template is published by the partner to their tenant".'
+            meta_advices: '- User manual; Wiki URL; ...'
+            meta_author: '- Author.'
+            meta_components: '- Components (e.g: MySql, Apache, etc.).'
+            meta_features: '- List of functions.'
+            meta_hints: '- Hints.'
+            meta_icon: '- base64 encoded image of the icon.'
+            meta_license: '- License number.'
+            meta_os: '- Operating system.'
+            meta_overview: '- Describes the main function of the application.'
+            meta_terms_of_use: '- Terms of use.'
+            name: '- The name of the marketplace application.'
+            object_storage_path: '- Path to the images for the application.'
+            publish_global_requested_date: '- The date when a partner requested their tenants template to be published.'
+            publish_requested_date: '- The date when the tenant requested their template to be published.'
+            published_date: '- The date when the template is published into other tenant in the same partner.'
+            published_global_date: '- The date when a template is published to other partner.'
+            setup_cores: '- Number of server''s cores.'
+            setup_memory: '- The capacity of server''s memory in GB.'
+            setup_storage_capacity: '- The capacity of server''s storage in GB.'
+            status: '- The status of the marketplace application.'
+            type: '- The type of template.'
+            unique_hash: '- Unique hash to allow user to import the self-created marketplace application.'
+        importStatements: []
+    marketplace application:
+        subCategory: ""
+        description: Manages marketplace applications in Gridscale.
+        name: marketplace application
+        title: marketplace application
+        argumentDocs:
+            category: '- (Required) Category of marketplace application. Accepted values: "CMS", "project management", "Adminpanel", "Collaboration", "Cloud Storage", "Archiving".'
+            change_time: '- The date and time of the last marketplace application change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the marketplace application was initially created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            id: '- The UUID of the marketplace application.'
+            is_application_owner: '- Whether the you are the owner of application or not.'
+            is_publish_global: '- Whether a template is published to other partner or not.'
+            is_publish_global_requested: '- Whether a partner wants their tenant template published to other partners.'
+            is_publish_requested: '- Whether the tenants want their template to be published or not.'
+            is_published: '- Whether the template is published by the partner to their tenant".'
+            meta_advices: '- See Argument Reference above.'
+            meta_author: '- (Optional) Author.'
+            meta_components: '- (Optional) Components (e.g: MySql, Apache, etc.).'
+            meta_features: '- (Optional) List of functions.'
+            meta_hints: '- (Optional) Hints.'
+            meta_icon: '- (Optional) base64 encoded image of the icon.'
+            meta_license: '- (Optional) License number.'
+            meta_os: '- (Optional) Operating system.'
+            meta_overview: '- (Optional) Describes the main function of the application.'
+            meta_terms_of_use: '- (Optional) Terms of use.'
+            name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            object_storage_path: '- (Required) Path to the images for the application, must be in .gz format and started with s3//.'
+            publish_global_requested_date: '- The date when a partner requested their tenants template to be published.'
+            publish_requested_date: '- The date when the tenant requested their template to be published.'
+            published_date: '- The date when the template is published into other tenant in the same partner.'
+            published_global_date: '- The date when a template is published to other partner.'
+            setup_cores: '- (Required) Number of server''s cores.'
+            setup_memory: '- (Required) The capacity of server''s memory in GB.'
+            setup_storage_capacity: '- (Required) The capacity of server''s storage in GB.'
+            status: '- The status of the marketplace application.'
+            type: '- The type of template.'
+            unique_hash: '- Unique hash to allow user to import the self-created marketplace application.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+        importStatements: []
+    object storage access key:
+        subCategory: ""
+        description: Manages an access key of an object storage in gridscale.
+        name: object storage access key
+        title: object storage access key
+        argumentDocs:
+            access_key: '- Access key of an object storage.'
+            comment: '- (Optional) A comment for the object storage access key.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            id: '- The access key of the object storage.'
+            secret_key: '- Secret key of an object storage.'
+            user_uuid: '- (Optional, Computed) If a user_uuid is set, a user-specific key will get created. If no user_uuid is set along a user with write-access to the contract will still only create a user-specific key for themselves while a user with admin-access to the contract will create a contract-level admin key.'
+        importStatements: []
+    object storage bucket:
+        subCategory: ""
+        description: Manages an object storage bucket in gridscale.
+        name: object storage bucket
+        title: object storage bucket
+        argumentDocs:
+            access_key: '- (Required, Force New) Access key.'
+            bucket_name: '- (Required, Force New) Name of the bucket.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            s3_host: '- (Required, Force New) Host of the s3. Default: "gos3.io".'
+            secret_key: '- (Required, Force New) Secret key.'
+        importStatements: []
+    storage backup schedule:
+        subCategory: ""
+        description: Manages a storage backup schedule.
+        name: storage backup schedule
+        title: storage backup schedule
+        argumentDocs:
+            active: '- (Required) The status of the schedule active or not.'
+            backup_location_name: '- The human-readable name of backup location. It supports the full UTF-8 character set, with a maximum of 64 characters.'
+            backup_location_uuid: '- (Optional, ForceNew) UUID of the location where your backup is stored.'
+            change_time: '- The date and time of the last backup schedule change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the backup schedule was initially created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            id: '- The UUID of the backup schedule.'
+            keep_backups: '- (Required) The amount of Snapshots to keep before overwriting the last created Snapshot (>=1).'
+            name: '- (Required) UUID of the backup schedule.'
+            next_runtime: '- (Required) The date and time that the backup schedule will be run.'
+            next_runtime_computed: '- The date and time that the backup schedule will be run. This date and time is computed by gridscale''s server.'
+            object_uuid: '- UUID of the backup.'
+            run_interval: '- (Required) The interval at which the schedule will run (in minutes, >=60).'
+            status: '- The status of the backup schedule.'
+            storage_backups: '- Related backups.'
+            storage_uuid: '- (Required) UUID of the storage that the backup schedule belongs to.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+        importStatements: []
+    storage snapshot:
+        subCategory: ""
+        description: Manages a storage snapshot in gridscale.
+        name: storage snapshot
+        title: storage snapshot
+        argumentDocs:
+            access_key: '- (Required) Access key.'
+            bucket: '- (Required) Bucket name.'
+            capacity: '- The capacity of the snapshot in GB.'
+            change_time: '- The date and time of the last snapshot change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the ip was initially created.'
+            current_price: '- The price for the current period since the last bill.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            host: '- (Required) Host of object storage. Must be of URL type, e.g., https://gos3.io'
+            id: '- (Required) ID of the rollback request. It can be any string value. Each rollback request has to have a UNIQUE id.'
+            labels: '- (Optional) The list of labels.'
+            license_product_no: '- If a template has been used that requires a license key (e.g. Windows Servers) this shows the product_no of the license (see the /prices endpoint for more details).'
+            location_country: '- The human-readable name of the country of the snapshot.'
+            location_iata: '- The IATA airport code, which works as a location identifier.'
+            location_name: '- The human-readable name of the location of the snapshot.'
+            location_uuid: '- The UUID of the location, that helps to identify which datacenter an object belongs to.'
+            name: '- (Required) The name of the snapshot.'
+            object: '- (Required) Name of file (include file path).'
+            object_storage_export: '- (Optional) Export snapshot to a object storage.'
+            private: '- (Required) Privacy.'
+            rollback: '- (Optional) Returns a storage to the state of the selected Snapshot.'
+            rollback_time: '- The time when rollback request is fulfilled.'
+            secret_key: '- (Required) Secret key.'
+            status: '- The status of the snapshot.'
+            storage_uuid: '- (Required) UUID of the storage used to create this snapshot.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
+            usage_in_minutes: '- Total minutes the ip has been running.'
+        importStatements: []
+    storage snapshot schedule:
+        subCategory: ""
+        description: Manages a storage snapshot schedule.
+        name: storage snapshot schedule
+        title: storage snapshot schedule
+        argumentDocs:
+            change_time: '- The date and time of the last snapshot schedule change.'
+            create: '- (Default value is "5m" - 5 minutes) Used for creating a resource.'
+            create_time: '- The date and time the snapshot schedule was initially created.'
+            delete: '- (Default value is "5m" - 5 minutes) Used for deleting a resource.'
+            id: '- The UUID of the snapshot schedule.'
+            keep_snapshots: '- (Required) The amount of Snapshots to keep before overwriting the last created Snapshot (>=1).'
+            labels: '- (Optional) The list of labels.'
+            name: '- (Required) UUID of the snapshot schedule.'
+            next_runtime: '- (Optional) The date and time that the snapshot schedule will be run.'
+            next_runtime_computed: '- The date and time that the snapshot schedule will be run. This date and time is computed by gridscale''s server.'
+            object_uuid: '- UUID of the snapshot.'
+            run_interval: '- (Required) The interval at which the schedule will run (in minutes, >=60).'
+            snapshot: '- Related snapshots.'
+            status: '- The status of the snapshot schedule.'
+            storage_uuid: '- (Required) UUID of the storage that the snapshot schedule belongs to.'
+            update: '- (Default value is "5m" - 5 minutes) Used for updating a resource.'
         importStatements: []
