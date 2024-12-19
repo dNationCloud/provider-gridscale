@@ -96,6 +96,12 @@ spec:
                       Defines the reverse DNS entry for the IP address (PTR Resource Record).
                       Defines the reverse DNS entry for the IP address (PTR Resource Record).
                     type: string
+                  timeouts:
+                    additionalProperties:
+                      type: string
+                    description: Timeouts configuration (create, update, delete).
+                    type: object
+                    x-kubernetes-map-type: granular
                 type: object
               initProvider:
                 description: |-
@@ -133,6 +139,12 @@ spec:
                       Defines the reverse DNS entry for the IP address (PTR Resource Record).
                       Defines the reverse DNS entry for the IP address (PTR Resource Record).
                     type: string
+                  timeouts:
+                    additionalProperties:
+                      type: string
+                    description: Timeouts configuration (create, update, delete).
+                    type: object
+                    x-kubernetes-map-type: granular
                 type: object
               managementPolicies:
                 default:
@@ -382,6 +394,12 @@ spec:
                   status:
                     description: status indicates the status of the object.
                     type: string
+                  timeouts:
+                    additionalProperties:
+                      type: string
+                    description: Timeouts configuration (create, update, delete).
+                    type: object
+                    x-kubernetes-map-type: granular
                   usageInMinutes:
                     description: The amount of minutes the IP address has been in
                       use.

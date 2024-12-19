@@ -4,17 +4,12 @@ import (
 	"fmt"
 
 	"github.com/crossplane/upjet/pkg/config"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("gridscale_ipv4", func(r *config.Resource) {
-		// Optional fields
-		// TODO: Should be the failover in the LateInitializer?
-		r.LateInitializer = config.LateInitializer{
-			IgnoredFields: []string{"failover", "reverse_dns", "labels"},
-		}
-
 		// Add validation for the "name" field (max length 64 characters)
 		r.TerraformResource.Schema["name"].ValidateFunc = func(val interface{}, key string) ([]string, []error) {
 			value, ok := val.(string)
@@ -25,6 +20,15 @@ func Configure(p *config.Provider) {
 				return nil, []error{fmt.Errorf("name must be 64 characters or fewer")}
 			}
 			return nil, nil
+		}
+
+		r.TerraformResource.Schema["timeouts"] = &schema.Schema{
+			Type:        schema.TypeMap,
+			Optional:    true,
+			Description: "Timeouts configuration (create, update, delete).",
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		}
 	})
 }
