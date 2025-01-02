@@ -1,0 +1,13 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: IPv6
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/ipv6
+  labels:
+    testing.upbound.io/example-name: terra-ipv6-test
+  name: terra-ipv6-test
+spec:
+  forProvider:
+    name: terra-test
+    timeouts:
+    - create: 10m

@@ -14,6 +14,10 @@ func Configure(p *config.Provider) {
 		addNameValidation(r)
 		addTimeoutSchema(r)
 	})
+	p.AddResourceConfigurator("gridscale_ipv6", func(r *config.Resource) {
+		addNameValidation(r)
+		addTimeoutSchema(r)
+	})
 }
 
 // addNameValidation adds validation for the "name" field.
