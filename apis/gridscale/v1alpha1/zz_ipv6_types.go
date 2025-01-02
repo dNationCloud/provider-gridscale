@@ -31,6 +31,13 @@ type IPv6InitParameters struct {
 	// Defines the reverse DNS entry for the IP address (PTR Resource Record).
 	// Defines the reverse DNS entry for the IP address (PTR Resource Record).
 	ReverseDNS *string `json:"reverseDns,omitempty" tf:"reverse_dns,omitempty"`
+<<<<<<< HEAD
+=======
+
+	// Timeouts configuration (create, update, delete).
+	// +mapType=granular
+	Timeouts map[string]*string `json:"timeouts,omitempty" tf:"timeouts,omitempty"`
+>>>>>>> 2e29b70 (Add ipv6 resource)
 }
 
 type IPv6Observation struct {
@@ -96,6 +103,13 @@ type IPv6Observation struct {
 	// status indicates the status of the object.
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 
+<<<<<<< HEAD
+=======
+	// Timeouts configuration (create, update, delete).
+	// +mapType=granular
+	Timeouts map[string]*string `json:"timeouts,omitempty" tf:"timeouts,omitempty"`
+
+>>>>>>> 2e29b70 (Add ipv6 resource)
 	// The amount of minutes the IP address has been in use.
 	UsageInMinutes *float64 `json:"usageInMinutes,omitempty" tf:"usage_in_minutes,omitempty"`
 }
@@ -122,6 +136,14 @@ type IPv6Parameters struct {
 	// Defines the reverse DNS entry for the IP address (PTR Resource Record).
 	// +kubebuilder:validation:Optional
 	ReverseDNS *string `json:"reverseDns,omitempty" tf:"reverse_dns,omitempty"`
+<<<<<<< HEAD
+=======
+
+	// Timeouts configuration (create, update, delete).
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	Timeouts map[string]*string `json:"timeouts,omitempty" tf:"timeouts,omitempty"`
+>>>>>>> 2e29b70 (Add ipv6 resource)
 }
 
 // IPv6Spec defines the desired state of IPv6

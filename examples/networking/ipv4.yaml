@@ -6,5 +6,7 @@ spec:
   forProvider:
     name: test-ipv4
     failover: true
+    timeouts: 
+      create: "1m"
   providerConfigRef:
     name: default

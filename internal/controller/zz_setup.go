@@ -11,6 +11,7 @@ import (
 
 	ipv4 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv4"
 	ipv6 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv6"
+	network "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/network"
 	providerconfig "github.com/dNationCloud/provider-gridscale/internal/controller/providerconfig"
 )
 
@@ -20,6 +21,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		ipv4.Setup,
 		ipv6.Setup,
+		network.Setup,
 		providerconfig.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {

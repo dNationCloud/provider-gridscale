@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: ipv4s.gridscale.crossplane.io
+  name: networks.gridscale.crossplane.io
 spec:
   group: gridscale.crossplane.io
   names:
@@ -12,10 +12,10 @@ spec:
     - crossplane
     - managed
     - gridscale
-    kind: IPv4
-    listKind: IPv4List
-    plural: ipv4s
-    singular: ipv4
+    kind: Network
+    listKind: NetworkList
+    plural: networks
+    singular: network
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: IPv4 is the Schema for the IPv4s API. Manages an IPv4 address
+        description: Network is the Schema for the Networks API. Manages a network
           in gridscale.
         properties:
           apiVersion:
@@ -55,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: IPv4Spec defines the desired state of IPv4
+            description: NetworkSpec defines the desired state of Network
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,10 +73,39 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  failover:
+                  dhcpActive:
                     description: |-
-                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
-                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                      Enable DHCP.
+                      Enable DHCP.
+                    type: boolean
+                  dhcpDns:
+                    description: |-
+                      The IP address reserved and communicated by the dhcp service to be the default gateway.
+                      DHCP DNS.
+                    type: string
+                  dhcpGateway:
+                    description: |-
+                      The general IP Range configured for this network (/24 for private networks). If it is not set, gridscale internal default range is used.
+                      The IP address reserved and communicated by the dhcp service to be the default gateway.
+                    type: string
+                  dhcpRange:
+                    description: |-
+                      DHCP DNS. If it is not set and DHCP is enabled, dhcp_range will be set by the backend automatically.
+                      The general IP Range configured for this network (/24 for private networks). If it is not set, gridscale internal default range is used.
+                      If it is not set and DHCP is enabled, dhcp_range will be set by the backend automatically.
+                    type: string
+                  dhcpReservedSubnet:
+                    description: |-
+                      Subrange within the IP range.
+                      Subrange within the IP range.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  l2security:
+                    description: |-
+                      Defines information about MAC spoofing protection (filters layer2 and ARP traffic based on MAC source). It can only be (de-)activated on a private network - the public network always has l2security enabled. It will be true if the network is public, and false if the network is private.
+                      MAC spoofing protection - filters layer2 and ARP traffic based on source MAC
                     type: boolean
                   labels:
                     description: |-
@@ -91,17 +120,6 @@ spec:
                       The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
                       The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
                     type: string
-                  reverseDns:
-                    description: |-
-                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
-                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
-                    type: string
-                  timeouts:
-                    additionalProperties:
-                      type: string
-                    description: Timeouts configuration (create, update, delete).
-                    type: object
-                    x-kubernetes-map-type: granular
                 type: object
               initProvider:
                 description: |-
@@ -116,10 +134,39 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  failover:
+                  dhcpActive:
                     description: |-
-                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
-                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                      Enable DHCP.
+                      Enable DHCP.
+                    type: boolean
+                  dhcpDns:
+                    description: |-
+                      The IP address reserved and communicated by the dhcp service to be the default gateway.
+                      DHCP DNS.
+                    type: string
+                  dhcpGateway:
+                    description: |-
+                      The general IP Range configured for this network (/24 for private networks). If it is not set, gridscale internal default range is used.
+                      The IP address reserved and communicated by the dhcp service to be the default gateway.
+                    type: string
+                  dhcpRange:
+                    description: |-
+                      DHCP DNS. If it is not set and DHCP is enabled, dhcp_range will be set by the backend automatically.
+                      The general IP Range configured for this network (/24 for private networks). If it is not set, gridscale internal default range is used.
+                      If it is not set and DHCP is enabled, dhcp_range will be set by the backend automatically.
+                    type: string
+                  dhcpReservedSubnet:
+                    description: |-
+                      Subrange within the IP range.
+                      Subrange within the IP range.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  l2security:
+                    description: |-
+                      Defines information about MAC spoofing protection (filters layer2 and ARP traffic based on MAC source). It can only be (de-)activated on a private network - the public network always has l2security enabled. It will be true if the network is public, and false if the network is private.
+                      MAC spoofing protection - filters layer2 and ARP traffic based on source MAC
                     type: boolean
                   labels:
                     description: |-
@@ -134,17 +181,6 @@ spec:
                       The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
                       The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
                     type: string
-                  reverseDns:
-                    description: |-
-                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
-                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
-                    type: string
-                  timeouts:
-                    additionalProperties:
-                      type: string
-                    description: Timeouts configuration (create, update, delete).
-                    type: object
-                    x-kubernetes-map-type: granular
                 type: object
               managementPolicies:
                 default:
@@ -313,43 +349,81 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
           status:
-            description: IPv4Status defines the observed state of IPv4.
+            description: NetworkStatus defines the observed state of Network.
             properties:
               atProvider:
                 properties:
+                  autoAssignedServers:
+                    description: |-
+                      A list of server UUIDs with the corresponding IPs that are designated by the DHCP server.
+                      A list of server UUIDs with the corresponding IPs that are designated by the DHCP server.
+                    items:
+                      properties:
+                        ip:
+                          description: IP which is assigned to the server.
+                          type: string
+                        serverUuid:
+                          description: UUID of the server.
+                          type: string
+                      type: object
+                    type: array
                   changeTime:
                     description: |-
                       Defines the date and time of the last object change.
-                      The date and time of the last object change.
+                      The date and time of the last object change
                     type: string
                   createTime:
                     description: |-
                       The time the object was created.
-                      The date and time the object was initially created.
+                      The date and time the object was initially created
                     type: string
-                  currentPrice:
-                    description: |-
-                      The price for the current period since the last bill.
-                      Defines the price for the current period since the last bill.
-                    type: number
                   deleteBlock:
                     description: |-
-                      Defines if the object is administratively blocked. If true, it can not be deleted by the user.
-                      Defines if the object is administratively blocked. If true, it can not be deleted by the user.
+                      If deleting this network is allowed.
+                      If deleting this network is allowed
                     type: boolean
-                  failover:
+                  dhcpActive:
                     description: |-
-                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
-                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                      Enable DHCP.
+                      Enable DHCP.
                     type: boolean
+                  dhcpDns:
+                    description: |-
+                      The IP address reserved and communicated by the dhcp service to be the default gateway.
+                      DHCP DNS.
+                    type: string
+                  dhcpGateway:
+                    description: |-
+                      The general IP Range configured for this network (/24 for private networks). If it is not set, gridscale internal default range is used.
+                      The IP address reserved and communicated by the dhcp service to be the default gateway.
+                    type: string
+                  dhcpRange:
+                    description: |-
+                      DHCP DNS. If it is not set and DHCP is enabled, dhcp_range will be set by the backend automatically.
+                      The general IP Range configured for this network (/24 for private networks). If it is not set, gridscale internal default range is used.
+                      If it is not set and DHCP is enabled, dhcp_range will be set by the backend automatically.
+                    type: string
+                  dhcpReservedSubnet:
+                    description: |-
+                      Subrange within the IP range.
+                      Subrange within the IP range.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
                   id:
                     type: string
-                  ip:
+                  l2security:
                     description: |-
-                      Defines the IP address.
-                      Defines the IP address.
-                    type: string
+                      Defines information about MAC spoofing protection (filters layer2 and ARP traffic based on MAC source). It can only be (de-)activated on a private network - the public network always has l2security enabled. It will be true if the network is public, and false if the network is private.
+                      MAC spoofing protection - filters layer2 and ARP traffic based on source MAC
+                    type: boolean
                   labels:
                     description: |-
                       List of labels in the format [ "label1", "label2" ].
@@ -375,7 +449,7 @@ spec:
                     type: string
                   locationUuid:
                     description: |-
-                      See Argument Reference above.
+                      The location this network is placed. The location of a resource is determined by it's project.
                       The location this object is placed.
                     type: string
                   name:
@@ -383,27 +457,30 @@ spec:
                       The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
                       The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
                     type: string
-                  prefix:
-                    description: The network address and the subnet.
-                    type: string
-                  reverseDns:
+                  networkType:
                     description: |-
-                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
-                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
+                      The type of this network, can be mpls, breakout or network.
+                      The type of this network, can be mpls, breakout or network.
                     type: string
+                  pinnedServers:
+                    description: |-
+                      A list of server UUIDs with the corresponding IPs that are designated by the user.
+                      A list of server UUIDs with the corresponding IPs that are designated by the user.
+                    items:
+                      properties:
+                        ip:
+                          description: IP which is assigned to the server.
+                          type: string
+                        serverUuid:
+                          description: UUID of the server.
+                          type: string
+                      type: object
+                    type: array
                   status:
-                    description: status indicates the status of the object.
+                    description: |-
+                      status indicates the status of the object.
+                      status indicates the status of the object.
                     type: string
-                  timeouts:
-                    additionalProperties:
-                      type: string
-                    description: Timeouts configuration (create, update, delete).
-                    type: object
-                    x-kubernetes-map-type: granular
-                  usageInMinutes:
-                    description: The amount of minutes the IP address has been in
-                      use.
-                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.
