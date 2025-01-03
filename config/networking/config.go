@@ -18,6 +18,19 @@ func Configure(p *config.Provider) {
 		addNameValidation(r)
 		addTimeoutSchema(r)
 	})
+	p.AddResourceConfigurator("gridscale_loadbalancer", func(r *config.Resource) {
+		addNameValidation(r)
+		addTimeoutSchema(r)
+		// Cross Resource Reference for listen_ipv4_uuid to gridscale_ipv4
+		r.References["listen_ipv4_uuid"] = config.Reference{
+			TerraformName: "gridscale_ipv4",
+		}
+
+		// Cross Resource Reference for listen_ipv6_uuid to gridscale_ipv6
+		r.References["listen_ipv6_uuid"] = config.Reference{
+			TerraformName: "gridscale_ipv6",
+		}
+	})
 }
 
 // addNameValidation adds validation for the "name" field.
