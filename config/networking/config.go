@@ -11,27 +11,11 @@ import (
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("gridscale_ipv4", func(r *config.Resource) {
-		addNameValidation(r)
 		addTimeoutSchema(r)
 	})
 	p.AddResourceConfigurator("gridscale_ipv6", func(r *config.Resource) {
-		addNameValidation(r)
 		addTimeoutSchema(r)
 	})
-}
-
-// addNameValidation adds validation for the "name" field.
-func addNameValidation(r *config.Resource) {
-	r.TerraformResource.Schema["name"].ValidateFunc = func(val interface{}, key string) ([]string, []error) {
-		value, ok := val.(string)
-		if !ok {
-			return nil, []error{fmt.Errorf("expected type string for name, got %T", val)}
-		}
-		if len(value) > 64 {
-			return nil, []error{fmt.Errorf("name must be 64 characters or fewer")}
-		}
-		return nil, nil
-	}
 }
 
 // addTimeoutSchema adds the timeouts schema and handles defaults.
