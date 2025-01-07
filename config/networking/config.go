@@ -18,7 +18,8 @@ func Configure(p *config.Provider) {
 // resulting in multiple unwanted resource instances being created every time the reconcile loop runs.
 // This can lead to resource duplication and unnecessary load on the gridscale API.
 // The `addTimeoutSchema` function is a potential starting point for defining timeout behavior by adding a `timeouts` schema
-// that allows users to configure timeouts for create, update, and delete operations.
+// that allows users to configure timeouts for create, update, and delete operations. Also take a look at this
+// https://github.com/gridscale/terraform-provider-gridscale/blob/master/gridscale/resource_gridscale_ipv4.go#L108
 // func addTimeoutSchema(r *config.Resource) {
 // 	r.TerraformResource.Schema["timeouts"] = &schema.Schema{
 // 		Type:        schema.TypeMap,
