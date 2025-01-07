@@ -9,7 +9,8 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
-	resource "github.com/dNationCloud/provider-gridscale/internal/controller/null/resource"
+	ipv4 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv4"
+	ipv6 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv6"
 	providerconfig "github.com/dNationCloud/provider-gridscale/internal/controller/providerconfig"
 )
 
@@ -17,7 +18,8 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		ipv4.Setup,
+		ipv6.Setup,
 		providerconfig.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {

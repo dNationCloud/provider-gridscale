@@ -25,6 +25,8 @@ const (
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
 	errUnmarshalCredentials = "cannot unmarshal gridscale credentials as JSON"
+	uuid                    = "uuid"
+	token                   = "token"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -63,10 +65,13 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		}
 
 		// Set credentials in Terraform provider configuration.
-		/*ps.Configuration = map[string]any{
-			"username": creds["username"],
-			"password": creds["password"],
-		}*/
+		ps.Configuration = map[string]any{}
+		if v, ok := creds[uuid]; ok {
+			ps.Configuration[uuid] = v
+		}
+		if v, ok := creds[token]; ok {
+			ps.Configuration[token] = v
+		}
 		return ps, nil
 	}
 }

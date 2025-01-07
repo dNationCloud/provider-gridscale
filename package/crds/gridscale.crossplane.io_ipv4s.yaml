@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: resources.null.gridscale.upbound.io
+  name: ipv4s.gridscale.crossplane.io
 spec:
-  group: null.gridscale.upbound.io
+  group: gridscale.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - gridscale
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    kind: IPv4
+    listKind: IPv4List
+    plural: ipv4s
+    singular: ipv4
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,10 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. The null_resource
-          resource implements the standard resource lifecycle but takes no further
-          action.hashicorp. The triggers argument allows specifying an arbitrary set
-          of values that, when changed, will cause the resource to be replaced.
+        description: IPv4 is the Schema for the IPv4s API. Manages an IPv4 address
+          in gridscale.
         properties:
           apiVersion:
             description: |-
@@ -57,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: IPv4Spec defines the desired state of IPv4
             properties:
               deletionPolicy:
                 default: Delete
@@ -75,14 +73,29 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
-                    additionalProperties:
-                      type: string
+                  failover:
                     description: |-
-                      running any associated provisioners.
-                      A map of arbitrary strings that, when changed, will force the null resource to be replaced, re-running any associated provisioners.
-                    type: object
-                    x-kubernetes-map-type: granular
+                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                    type: boolean
+                  labels:
+                    description: |-
+                      List of labels in the format [ "label1", "label2" ].
+                      List of labels.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  name:
+                    description: |-
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                    type: string
+                  reverseDns:
+                    description: |-
+                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
+                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -97,14 +110,29 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  triggers:
-                    additionalProperties:
-                      type: string
+                  failover:
                     description: |-
-                      running any associated provisioners.
-                      A map of arbitrary strings that, when changed, will force the null resource to be replaced, re-running any associated provisioners.
-                    type: object
-                    x-kubernetes-map-type: granular
+                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                    type: boolean
+                  labels:
+                    description: |-
+                      List of labels in the format [ "label1", "label2" ].
+                      List of labels.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  name:
+                    description: |-
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                    type: string
+                  reverseDns:
+                    description: |-
+                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
+                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -274,22 +302,90 @@ spec:
             - forProvider
             type: object
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: IPv4Status defines the observed state of IPv4.
             properties:
               atProvider:
                 properties:
-                  id:
-                    description: (String) This is set to a random value at create
-                      time.
-                    type: string
-                  triggers:
-                    additionalProperties:
-                      type: string
+                  changeTime:
                     description: |-
-                      running any associated provisioners.
-                      A map of arbitrary strings that, when changed, will force the null resource to be replaced, re-running any associated provisioners.
-                    type: object
-                    x-kubernetes-map-type: granular
+                      Defines the date and time of the last object change.
+                      The date and time of the last object change.
+                    type: string
+                  createTime:
+                    description: |-
+                      The time the object was created.
+                      The date and time the object was initially created.
+                    type: string
+                  currentPrice:
+                    description: |-
+                      The price for the current period since the last bill.
+                      Defines the price for the current period since the last bill.
+                    type: number
+                  deleteBlock:
+                    description: |-
+                      Defines if the object is administratively blocked. If true, it can not be deleted by the user.
+                      Defines if the object is administratively blocked. If true, it can not be deleted by the user.
+                    type: boolean
+                  failover:
+                    description: |-
+                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                      Sets failover mode for this IP. If true, then this IP is no longer available for DHCP and can no longer be related to any server.
+                    type: boolean
+                  id:
+                    type: string
+                  ip:
+                    description: |-
+                      Defines the IP address.
+                      Defines the IP address.
+                    type: string
+                  labels:
+                    description: |-
+                      List of labels in the format [ "label1", "label2" ].
+                      List of labels.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  locationCountry:
+                    description: |-
+                      Two digit country code (ISO 3166-2) of the location where this object is placed.
+                      Two digit country code (ISO 3166-2) of the location where this object is placed.
+                    type: string
+                  locationIata:
+                    description: |-
+                      Uses IATA airport code, which works as a location identifier.
+                      Uses IATA airport code, which works as a location identifier
+                    type: string
+                  locationName:
+                    description: |-
+                      The location name.
+                      The human-readable name of the location. It supports the full UTF-8 character set, with a maximum of 64 characters
+                    type: string
+                  locationUuid:
+                    description: |-
+                      See Argument Reference above.
+                      The location this object is placed.
+                    type: string
+                  name:
+                    description: |-
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                    type: string
+                  prefix:
+                    description: The network address and the subnet.
+                    type: string
+                  reverseDns:
+                    description: |-
+                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
+                      Defines the reverse DNS entry for the IP address (PTR Resource Record).
+                    type: string
+                  status:
+                    description: status indicates the status of the object.
+                    type: string
+                  usageInMinutes:
+                    description: The amount of minutes the IP address has been in
+                      use.
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

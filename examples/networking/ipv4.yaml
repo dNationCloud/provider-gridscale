@@ -1,0 +1,10 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: IPv4
+metadata:
+  name: ipv4-test
+spec:
+  forProvider:
+    name: test-ipv4
+    failover: true
+  providerConfigRef:
+    name: default
