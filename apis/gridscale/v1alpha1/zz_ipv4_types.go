@@ -31,10 +31,6 @@ type IPv4InitParameters struct {
 	// Defines the reverse DNS entry for the IP address (PTR Resource Record).
 	// Defines the reverse DNS entry for the IP address (PTR Resource Record).
 	ReverseDNS *string `json:"reverseDns,omitempty" tf:"reverse_dns,omitempty"`
-
-	// Timeouts configuration (create, update, delete).
-	// +mapType=granular
-	Timeouts map[string]*string `json:"timeouts,omitempty" tf:"timeouts,omitempty"`
 }
 
 type IPv4Observation struct {
@@ -100,10 +96,6 @@ type IPv4Observation struct {
 	// status indicates the status of the object.
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 
-	// Timeouts configuration (create, update, delete).
-	// +mapType=granular
-	Timeouts map[string]*string `json:"timeouts,omitempty" tf:"timeouts,omitempty"`
-
 	// The amount of minutes the IP address has been in use.
 	UsageInMinutes *float64 `json:"usageInMinutes,omitempty" tf:"usage_in_minutes,omitempty"`
 }
@@ -130,11 +122,6 @@ type IPv4Parameters struct {
 	// Defines the reverse DNS entry for the IP address (PTR Resource Record).
 	// +kubebuilder:validation:Optional
 	ReverseDNS *string `json:"reverseDns,omitempty" tf:"reverse_dns,omitempty"`
-
-	// Timeouts configuration (create, update, delete).
-	// +kubebuilder:validation:Optional
-	// +mapType=granular
-	Timeouts map[string]*string `json:"timeouts,omitempty" tf:"timeouts,omitempty"`
 }
 
 // IPv4Spec defines the desired state of IPv4
