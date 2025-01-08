@@ -10,6 +10,8 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("gridscale_ipv6", func(r *config.Resource) {
 	})
+	p.AddResourceConfigurator("gridscale_network", func(r *config.Resource) {
+	})
 }
 
 // TODO: Implement timeout logic for the resources.

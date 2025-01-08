@@ -1,0 +1,15 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Network
+metadata:
+  name: network-test
+spec:
+  forProvider:
+    dhcpActive: true
+    dhcpDns: 192.168.121.2
+    dhcpGateway: 192.168.121.1
+    dhcpRange: 192.168.121.0/27
+    dhcpReservedSubnet:
+    - 192.168.121.0/31
+    name: network-test
+  providerConfigRef:
+    name: default

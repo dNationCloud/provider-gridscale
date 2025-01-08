@@ -1,0 +1,19 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Network
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/network
+  labels:
+    testing.upbound.io/example-name: networkname
+  name: networkname
+spec:
+  forProvider:
+    dhcpActive: true
+    dhcpDns: 192.168.121.2
+    dhcpGateway: 192.168.121.1
+    dhcpRange: 192.168.121.0/27
+    dhcpReservedSubnet:
+    - 192.168.121.0/31
+    name: terraform-network
+    timeouts:
+    - create: 10m
