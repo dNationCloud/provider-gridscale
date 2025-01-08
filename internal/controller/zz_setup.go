@@ -12,6 +12,7 @@ import (
 	ipv4 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv4"
 	ipv6 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv6"
 	k8s "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/k8s"
+	loadbalancer "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/loadbalancer"
 	network "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/network"
 	sshkey "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/sshkey"
 	providerconfig "github.com/dNationCloud/provider-gridscale/internal/controller/providerconfig"
@@ -24,6 +25,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		ipv4.Setup,
 		ipv6.Setup,
 		k8s.Setup,
+		loadbalancer.Setup,
 		network.Setup,
 		sshkey.Setup,
 		providerconfig.Setup,

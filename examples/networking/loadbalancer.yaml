@@ -1,0 +1,24 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Loadbalancer
+metadata:
+  name: test-lb
+spec:
+  forProvider:
+    algorithm: leastconn
+    backendServer:
+    - host: <domain or an IP address of a server>
+      weight: 100
+    forwardingRule:
+    - listenPort: 80
+      mode: http
+      targetPort: 80
+    name: test-lb
+    redirectHttpToHttps: false
+    listenIpv4UuidSelector:
+      matchLabels:
+        testing.upbound.io/example-name: lb
+    listenIpv6UuidSelector:
+      matchLabels:
+        testing.upbound.io/example-name: lb
+  providerConfigRef:
+    name: default
