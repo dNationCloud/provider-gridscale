@@ -10,6 +10,7 @@ import (
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	"github.com/dNationCloud/provider-gridscale/config/compute"
 	"github.com/dNationCloud/provider-gridscale/config/networking"
 )
 
@@ -37,6 +38,7 @@ func GetProvider() *ujconfig.Provider {
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		networking.Configure,
+		compute.Configure,
 	} {
 		configure(pc)
 	}

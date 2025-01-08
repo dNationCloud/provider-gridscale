@@ -1,0 +1,790 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: k8ses.gridscale.crossplane.io
+spec:
+  group: gridscale.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - gridscale
+    kind: K8S
+    listKind: K8SList
+    plural: k8ses
+    singular: k8s
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: K8S is the Schema for the K8Ss API. Manages a k8s cluster in
+          gridscale.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: K8SSpec defines the desired state of K8S
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: |-
+                  DeletionPolicy specifies what will happen to the underlying external
+                  when this managed resource is deleted - either "Delete" or "Orphan" the
+                  external resource.
+                  This field is planned to be deprecated in favor of the ManagementPolicies
+                  field in a future release. Currently, both could be set independently and
+                  non-default values would be honored if the feature flag is enabled.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  gskVersion:
+                    description: |-
+                      The gridscale's Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
+                      The gridscale k8s PaaS version (issued by gridscale) of this instance.
+                    type: string
+                  labels:
+                    description: |-
+                      List of labels in the format [ "label1", "label2" ].
+                      List of labels.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  name:
+                    description: |-
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                    type: string
+                  nodePool:
+                    description: |-
+                      Node pool's specification. NOTE: The node pool's specification is not yet mutable (except node_count).
+                      Node pool's specification.
+                    items:
+                      properties:
+                        clusterCidr:
+                          description: |-
+                            (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
+                            The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
+                          type: string
+                        clusterTrafficEncryption:
+                          description: |-
+                            Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+                            Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+                          type: boolean
+                        cores:
+                          description: |-
+                            Cores per worker node.
+                            Cores per worker node.
+                          type: number
+                        memory:
+                          description: |-
+                            Memory per worker node (in GiB).
+                            Memory per worker node (in GiB).
+                          type: number
+                        name:
+                          description: |-
+                            The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                            Name of node pool.
+                          type: string
+                        nodeCount:
+                          description: |-
+                            Number of worker nodes.
+                            Number of worker nodes.
+                          type: number
+                        rocketStorage:
+                          description: |-
+                            Rocket storage per worker node (in GiB).
+                            Rocket storage per worker node (in GiB).
+                          type: number
+                        storage:
+                          description: |-
+                            Storage per worker node (in GiB).
+                            Storage per worker node (in GiB).
+                          type: number
+                        storageType:
+                          description: |-
+                            Storage type (one of storage, storage_high, storage_insane).
+                            Storage type.
+                          type: string
+                        surgeNode:
+                          description: |-
+                            Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
+                            Enable surge node to avoid resources shortage during the cluster upgrade.
+                          type: boolean
+                      type: object
+                    type: array
+                  oidcCaPem:
+                    description: |-
+                      Custom CA from customer in pem format as string.
+                      Custom CA from customer in pem format as string.
+                    type: string
+                  oidcClientId:
+                    description: |-
+                      A client ID that all tokens must be issued for.
+                      A client ID that all tokens must be issued for.
+                    type: string
+                  oidcEnabled:
+                    description: |-
+                      Enable OIDC for the k8s cluster.
+                      Disable or enable OIDC
+                    type: boolean
+                  oidcGroupsClaim:
+                    description: |-
+                      JWT claim to use as the user's group.
+                      JWT claim to use as the user's group.
+                    type: string
+                  oidcGroupsPrefix:
+                    description: |-
+                      Prefix prepended to group claims to prevent clashes with existing names (such as system: groups). For example, the value oidc: will create group names like oidc:engineering and oidc:infra.
+                      Prefix prepended to group claims to prevent clashes with existing names (such as system: groups). For example, the value oidc: will create group names like oidc:engineering and oidc:infra.
+                    type: string
+                  oidcIssuerUrl:
+                    description: |-
+                      URL of the provider that allows the API server to discover public signing keys. Only URLs that use the https:// scheme are accepted.
+                      URL of the provider that allows the API server to discover public signing keys. Only URLs that use the https:// scheme are accepted.
+                    type: string
+                  oidcRequiredClaim:
+                    description: |-
+                      A key=value pair that describes a required claim in the ID Token. Multiple claims can be set like this: key1=value1,key2=value2.
+                      A key=value pair that describes a required claim in the ID Token. Multiple claims can be set like this: key1=value1,key2=value2
+                    type: string
+                  oidcSigningAlgs:
+                    description: |-
+                      The signing algorithms accepted. Default is 'RS256'. Other option is 'RS512'.
+                      The signing algorithms accepted. Default is 'RS256'. Other option is 'RS512'.
+                    type: string
+                  oidcUsernameClaim:
+                    description: |-
+                      JWT claim to use as the user name.
+                      JWT claim to use as the user name.
+                    type: string
+                  oidcUsernamePrefix:
+                    description: |-
+                      Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn't provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.
+                      Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn't provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.
+                    type: string
+                  release:
+                    description: |-
+                      The Kubernetes release of this instance. Define which release will be used to create the cluster. For convenience, please use gscloud to get the list of available releases. NOTE: Either gsk_version or release is set at a time.
+                      The k8s release of this instance.
+                    type: string
+                  securityZoneUuid:
+                    description: |-
+                      DEPRECATED  Security zone UUID linked to the Kubernetes resource. If security_zone_uuid is not set, the default security zone will be created (if it doesn't exist) and linked. A change of this argument necessitates the re-creation of the resource.
+                      Security zone UUID linked to PaaS service.
+                    type: string
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  gskVersion:
+                    description: |-
+                      The gridscale's Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
+                      The gridscale k8s PaaS version (issued by gridscale) of this instance.
+                    type: string
+                  labels:
+                    description: |-
+                      List of labels in the format [ "label1", "label2" ].
+                      List of labels.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  name:
+                    description: |-
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                    type: string
+                  nodePool:
+                    description: |-
+                      Node pool's specification. NOTE: The node pool's specification is not yet mutable (except node_count).
+                      Node pool's specification.
+                    items:
+                      properties:
+                        clusterCidr:
+                          description: |-
+                            (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
+                            The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
+                          type: string
+                        clusterTrafficEncryption:
+                          description: |-
+                            Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+                            Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+                          type: boolean
+                        cores:
+                          description: |-
+                            Cores per worker node.
+                            Cores per worker node.
+                          type: number
+                        memory:
+                          description: |-
+                            Memory per worker node (in GiB).
+                            Memory per worker node (in GiB).
+                          type: number
+                        name:
+                          description: |-
+                            The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                            Name of node pool.
+                          type: string
+                        nodeCount:
+                          description: |-
+                            Number of worker nodes.
+                            Number of worker nodes.
+                          type: number
+                        rocketStorage:
+                          description: |-
+                            Rocket storage per worker node (in GiB).
+                            Rocket storage per worker node (in GiB).
+                          type: number
+                        storage:
+                          description: |-
+                            Storage per worker node (in GiB).
+                            Storage per worker node (in GiB).
+                          type: number
+                        storageType:
+                          description: |-
+                            Storage type (one of storage, storage_high, storage_insane).
+                            Storage type.
+                          type: string
+                        surgeNode:
+                          description: |-
+                            Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
+                            Enable surge node to avoid resources shortage during the cluster upgrade.
+                          type: boolean
+                      type: object
+                    type: array
+                  oidcCaPem:
+                    description: |-
+                      Custom CA from customer in pem format as string.
+                      Custom CA from customer in pem format as string.
+                    type: string
+                  oidcClientId:
+                    description: |-
+                      A client ID that all tokens must be issued for.
+                      A client ID that all tokens must be issued for.
+                    type: string
+                  oidcEnabled:
+                    description: |-
+                      Enable OIDC for the k8s cluster.
+                      Disable or enable OIDC
+                    type: boolean
+                  oidcGroupsClaim:
+                    description: |-
+                      JWT claim to use as the user's group.
+                      JWT claim to use as the user's group.
+                    type: string
+                  oidcGroupsPrefix:
+                    description: |-
+                      Prefix prepended to group claims to prevent clashes with existing names (such as system: groups). For example, the value oidc: will create group names like oidc:engineering and oidc:infra.
+                      Prefix prepended to group claims to prevent clashes with existing names (such as system: groups). For example, the value oidc: will create group names like oidc:engineering and oidc:infra.
+                    type: string
+                  oidcIssuerUrl:
+                    description: |-
+                      URL of the provider that allows the API server to discover public signing keys. Only URLs that use the https:// scheme are accepted.
+                      URL of the provider that allows the API server to discover public signing keys. Only URLs that use the https:// scheme are accepted.
+                    type: string
+                  oidcRequiredClaim:
+                    description: |-
+                      A key=value pair that describes a required claim in the ID Token. Multiple claims can be set like this: key1=value1,key2=value2.
+                      A key=value pair that describes a required claim in the ID Token. Multiple claims can be set like this: key1=value1,key2=value2
+                    type: string
+                  oidcSigningAlgs:
+                    description: |-
+                      The signing algorithms accepted. Default is 'RS256'. Other option is 'RS512'.
+                      The signing algorithms accepted. Default is 'RS256'. Other option is 'RS512'.
+                    type: string
+                  oidcUsernameClaim:
+                    description: |-
+                      JWT claim to use as the user name.
+                      JWT claim to use as the user name.
+                    type: string
+                  oidcUsernamePrefix:
+                    description: |-
+                      Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn't provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.
+                      Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn't provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.
+                    type: string
+                  release:
+                    description: |-
+                      The Kubernetes release of this instance. Define which release will be used to create the cluster. For convenience, please use gscloud to get the list of available releases. NOTE: Either gsk_version or release is set at a time.
+                      The k8s release of this instance.
+                    type: string
+                  securityZoneUuid:
+                    description: |-
+                      DEPRECATED  Security zone UUID linked to the Kubernetes resource. If security_zone_uuid is not set, the default security zone will be created (if it doesn't exist) and linked. A change of this argument necessitates the re-creation of the resource.
+                      Security zone UUID linked to PaaS service.
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  This field is planned to replace the DeletionPolicy field in a future
+                  release. Currently, both could be set independently and non-default
+                  values would be honored if the feature flag is enabled. If both are
+                  custom, the DeletionPolicy field will be ignored.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: |-
+                          Resolution specifies whether resolution of this reference is required.
+                          The default is 'Required', which means the reconcile will fail if the
+                          reference cannot be resolved. 'Optional' means this reference will be
+                          a no-op if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: |-
+                          Resolve specifies when this reference should be resolved. The default
+                          is 'IfNotPresent', which will attempt to resolve the reference only when
+                          the corresponding field is not present. Use 'Always' to resolve the
+                          reference on every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              publishConnectionDetailsTo:
+                description: |-
+                  PublishConnectionDetailsTo specifies the connection secret config which
+                  contains a name, metadata and a reference to secret store config to
+                  which any connection details for this managed resource should be written.
+                  Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  configRef:
+                    default:
+                      name: default
+                    description: |-
+                      SecretStoreConfigRef specifies which secret store config should be used
+                      for this ConnectionSecret.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  metadata:
+                    description: Metadata is the metadata for connection secret.
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Annotations are the annotations to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.annotations".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Labels are the labels/tags to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.labels".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      type:
+                        description: |-
+                          Type is the SecretType for the connection secret.
+                          - Only valid for Kubernetes Secret Stores.
+                        type: string
+                    type: object
+                  name:
+                    description: Name is the name of the connection secret.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                  This field is planned to be replaced in a future release in favor of
+                  PublishConnectionDetailsTo. Currently, both could be set independently
+                  and connection details would be published to both without affecting
+                  each other.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.nodePool is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.nodePool)
+                || (has(self.initProvider) && has(self.initProvider.nodePool))'
+          status:
+            description: K8SStatus defines the observed state of K8S.
+            properties:
+              atProvider:
+                properties:
+                  changeTime:
+                    description: |-
+                      Defines the date and time of the last object change.
+                      Time of the last change
+                    type: string
+                  createTime:
+                    description: |-
+                      The time the object was created.
+                      Time this service was created.
+                    type: string
+                  gskVersion:
+                    description: |-
+                      The gridscale's Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
+                      The gridscale k8s PaaS version (issued by gridscale) of this instance.
+                    type: string
+                  id:
+                    type: string
+                  k8sPrivateNetworkUuid:
+                    description: |-
+                      Private network UUID which k8s nodes are attached to. It can be used to attach other PaaS/VMs.
+                      Private network UUID which k8s nodes are attached to. It can be used to attach other PaaS/VMs.
+                    type: string
+                  labels:
+                    description: |-
+                      List of labels in the format [ "label1", "label2" ].
+                      List of labels.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  listenPort:
+                    description: The port number where this k8s service accepts connections.
+                    items:
+                      properties:
+                        name:
+                          description: The human-readable name of the object. It supports
+                            the full UTF-8 character set, with a maximum of 64 characters.
+                          type: string
+                        port:
+                          type: number
+                      type: object
+                    type: array
+                  name:
+                    description: |-
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                      The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                    type: string
+                  networkUuid:
+                    description: |-
+                      DEPRECATED  Network UUID containing security zone, which is linked to the k8s cluster.
+                      Network UUID containing security zone
+                    type: string
+                  nodePool:
+                    description: |-
+                      Node pool's specification. NOTE: The node pool's specification is not yet mutable (except node_count).
+                      Node pool's specification.
+                    items:
+                      properties:
+                        clusterCidr:
+                          description: |-
+                            (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
+                            The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
+                          type: string
+                        clusterTrafficEncryption:
+                          description: |-
+                            Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+                            Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+                          type: boolean
+                        cores:
+                          description: |-
+                            Cores per worker node.
+                            Cores per worker node.
+                          type: number
+                        memory:
+                          description: |-
+                            Memory per worker node (in GiB).
+                            Memory per worker node (in GiB).
+                          type: number
+                        name:
+                          description: |-
+                            The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+                            Name of node pool.
+                          type: string
+                        nodeCount:
+                          description: |-
+                            Number of worker nodes.
+                            Number of worker nodes.
+                          type: number
+                        rocketStorage:
+                          description: |-
+                            Rocket storage per worker node (in GiB).
+                            Rocket storage per worker node (in GiB).
+                          type: number
+                        storage:
+                          description: |-
+                            Storage per worker node (in GiB).
+                            Storage per worker node (in GiB).
+                          type: number
+                        storageType:
+                          description: |-
+                            Storage type (one of storage, storage_high, storage_insane).
+                            Storage type.
+                          type: string
+                        surgeNode:
+                          description: |-
+                            Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
+                            Enable surge node to avoid resources shortage during the cluster upgrade.
+                          type: boolean
+                      type: object
+                    type: array
+                  oidcCaPem:
+                    description: |-
+                      Custom CA from customer in pem format as string.
+                      Custom CA from customer in pem format as string.
+                    type: string
+                  oidcClientId:
+                    description: |-
+                      A client ID that all tokens must be issued for.
+                      A client ID that all tokens must be issued for.
+                    type: string
+                  oidcEnabled:
+                    description: |-
+                      Enable OIDC for the k8s cluster.
+                      Disable or enable OIDC
+                    type: boolean
+                  oidcGroupsClaim:
+                    description: |-
+                      JWT claim to use as the user's group.
+                      JWT claim to use as the user's group.
+                    type: string
+                  oidcGroupsPrefix:
+                    description: |-
+                      Prefix prepended to group claims to prevent clashes with existing names (such as system: groups). For example, the value oidc: will create group names like oidc:engineering and oidc:infra.
+                      Prefix prepended to group claims to prevent clashes with existing names (such as system: groups). For example, the value oidc: will create group names like oidc:engineering and oidc:infra.
+                    type: string
+                  oidcIssuerUrl:
+                    description: |-
+                      URL of the provider that allows the API server to discover public signing keys. Only URLs that use the https:// scheme are accepted.
+                      URL of the provider that allows the API server to discover public signing keys. Only URLs that use the https:// scheme are accepted.
+                    type: string
+                  oidcRequiredClaim:
+                    description: |-
+                      A key=value pair that describes a required claim in the ID Token. Multiple claims can be set like this: key1=value1,key2=value2.
+                      A key=value pair that describes a required claim in the ID Token. Multiple claims can be set like this: key1=value1,key2=value2
+                    type: string
+                  oidcSigningAlgs:
+                    description: |-
+                      The signing algorithms accepted. Default is 'RS256'. Other option is 'RS512'.
+                      The signing algorithms accepted. Default is 'RS256'. Other option is 'RS512'.
+                    type: string
+                  oidcUsernameClaim:
+                    description: |-
+                      JWT claim to use as the user name.
+                      JWT claim to use as the user name.
+                    type: string
+                  oidcUsernamePrefix:
+                    description: |-
+                      Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn't provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.
+                      Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn't provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.
+                    type: string
+                  release:
+                    description: |-
+                      The Kubernetes release of this instance. Define which release will be used to create the cluster. For convenience, please use gscloud to get the list of available releases. NOTE: Either gsk_version or release is set at a time.
+                      The k8s release of this instance.
+                    type: string
+                  securityZoneUuid:
+                    description: |-
+                      DEPRECATED  Security zone UUID linked to the Kubernetes resource. If security_zone_uuid is not set, the default security zone will be created (if it doesn't exist) and linked. A change of this argument necessitates the re-creation of the resource.
+                      Security zone UUID linked to PaaS service.
+                    type: string
+                  serviceTemplateUuid:
+                    description: |-
+                      PaaS service template that k8s service uses.g. the k8s service is upgraded by gridscale staffs).
+                      PaaS service template identifier for this service.
+                    type: string
+                  status:
+                    description: |-
+                      status indicates the status of the object.
+                      Current status of the service
+                    type: string
+                  usageInMinutes:
+                    description: |-
+                      The amount of minutes the IP address has been in use.
+                      Number of minutes that PaaS service is in use
+                    type: number
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

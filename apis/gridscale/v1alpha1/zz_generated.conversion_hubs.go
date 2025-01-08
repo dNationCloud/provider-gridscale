@@ -13,6 +13,9 @@ func (tr *IPv4) Hub() {}
 func (tr *IPv6) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *K8S) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *Network) Hub() {}
 
 // Hub marks this type as a conversion hub.
