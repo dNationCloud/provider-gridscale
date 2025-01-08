@@ -9,10 +9,11 @@ import "github.com/crossplane/upjet/pkg/config"
 // ExternalNameConfigs contains all external name configurations for this
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
-	// Import requires using a randomly generated ID from provider: nl-2e21sda
+	// Networking
 	"gridscale_ipv4":    config.IdentifierFromProvider,
 	"gridscale_ipv6":    config.IdentifierFromProvider,
 	"gridscale_network": config.IdentifierFromProvider,
+	"gridscale_sshkey":  config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

@@ -1,0 +1,14 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Sshkey
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/sshkey
+  labels:
+    testing.upbound.io/example-name: sshkey-john
+  name: sshkey-john
+spec:
+  forProvider:
+    name: john's computer
+    sshkey: an ssh public key
+    timeouts:
+    - create: 10m
