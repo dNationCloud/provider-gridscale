@@ -1,0 +1,20 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: K8S
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/k8s
+  labels:
+    testing.upbound.io/example-name: k8s-test
+  name: k8s-test
+spec:
+  forProvider:
+    name: test
+    nodePool:
+    - cores: 1
+      memory: 2
+      name: my_node_pool
+      nodeCount: 2
+      rocketStorage: 90
+      storage: 10
+      storageType: storage_insane
+    release: "1.26"

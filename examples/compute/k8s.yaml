@@ -1,0 +1,21 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: K8S
+metadata:
+  name: k8s-test
+spec:
+  forProvider:
+    name: test
+    nodePool:
+    - cores: 1
+      memory: 2
+      name: my_node_pool
+      nodeCount: 2
+      # rocketStorage: 70
+      storage: 30
+      storageType: storage_insane
+    release: "1.27"
+  providerConfigRef:
+    name: default
+  writeConnectionSecretToRef: # kubectl --kubeconfig <(kubectl get secret -n crossplane-system k8s-test-kubeconfig -ojsonpath='{.data.attribute\.kubeconfig}' | base64 -d) get no -owide
+    name: k8s-test-kubeconfig
+    namespace: crossplane-system
