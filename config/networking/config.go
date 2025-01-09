@@ -10,6 +10,17 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("gridscale_ipv6", func(r *config.Resource) {})
 	p.AddResourceConfigurator("gridscale_network", func(r *config.Resource) {})
 	p.AddResourceConfigurator("gridscale_sshkey", func(r *config.Resource) {})
+	p.AddResourceConfigurator("gridscale_loadbalancer", func(r *config.Resource) {
+		// Cross Resource Reference for listen_ipv4_uuid to gridscale_ipv4
+		r.References["listen_ipv4_uuid"] = config.Reference{
+			TerraformName: "gridscale_ipv4",
+		}
+		// Cross Resource Reference for listen_ipv6_uuid to gridscale_ipv6
+		r.References["listen_ipv6_uuid"] = config.Reference{
+			TerraformName: "gridscale_ipv6",
+		}
+		// TODO: Add cross resource reference for the backend_server field once the `gridscale_server` resource will be added
+	})
 }
 
 // TODO: Implement timeout logic for the resources.

@@ -1,0 +1,28 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Loadbalancer
+metadata:
+  name: test-lb
+spec:
+  forProvider:
+    algorithm: leastconn
+    backendServer:
+    - host: <domain or an IP address of a server>
+      weight: 100
+    forwardingRule:
+    - listenPort: 80
+      mode: http
+      targetPort: 80
+    name: test-lb
+    redirectHttpToHttps: false
+    # Optionally, you can reference listenIpv4Uuid and listenIpv6Uuid in the following ways:
+    # 1. Using the resource name
+    #    listenIpv4UuidRef:
+    #      name: <name>
+    # 2. Using the labels
+    #        listenIpv6UuidSelector:
+    #          matchLabels:
+    #            testing.upbound.io/example-name: lb
+    listenIpv4Uuid: <UUID of the IPv4 address>
+    listenIpv6Uuid: <UUID of the IPv6 address>
+  providerConfigRef:
+    name: default
