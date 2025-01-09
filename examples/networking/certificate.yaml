@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: example-ssl-certificate
+  namespace: crossplane-system
+type: Opaque
+data:
+  example-private-key: <base64-encoded-private-key>
+  example-leaf-key:  <base64-encoded-leaf-certificate>
+---
+apiVersion: ssl.crossplane.io/v1alpha1
+kind: Certificate
+metadata:
+  name: ssl-certificate-example
+spec:
+  forProvider:
+    leafCertificateSecretRef:
+      key: example-leaf-key
+      name: example-ssl-certificate
+      namespace: crossplane-system
+    name: example-ssl-certificate
+    privateKeySecretRef:
+      key: example-private-key
+      name: example-ssl-certificate
+      namespace: crossplane-system
+  providerConfigRef:
+    name: default
+###
+# You can then reference the certificate in the LoadBalancer resource like this
+###
+# apiVersion: gridscale.crossplane.io/v1alpha1
+# kind: Loadbalancer
+# metadata:
+#   annotations:
+#     meta.upbound.io/example-id: gridscale/v1alpha1/loadbalancer
+#   labels:
+#     testing.upbound.io/example-name: foo
+#   name: foo
+# spec:
+#   forProvider:
+#     forwardingRule:
+#     - certificateUuidRef:
+#         name: ssl-certificate-example
+#       listenPort: 80
+#       mode: http
+#       targetPort: 80

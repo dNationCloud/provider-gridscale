@@ -16,6 +16,7 @@ import (
 	network "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/network"
 	sshkey "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/sshkey"
 	providerconfig "github.com/dNationCloud/provider-gridscale/internal/controller/providerconfig"
+	certificate "github.com/dNationCloud/provider-gridscale/internal/controller/ssl/certificate"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
@@ -29,6 +30,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		network.Setup,
 		sshkey.Setup,
 		providerconfig.Setup,
+		certificate.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
