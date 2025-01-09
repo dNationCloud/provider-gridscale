@@ -14,11 +14,15 @@ spec:
       targetPort: 80
     name: test-lb
     redirectHttpToHttps: false
-    listenIpv4UuidSelector:
-      matchLabels:
-        testing.upbound.io/example-name: lb
-    listenIpv6UuidSelector:
-      matchLabels:
-        testing.upbound.io/example-name: lb
+    # Optionally, you can reference listenIpv4Uuid and listenIpv6Uuid in the following ways:
+    # 1. Using the resource name
+    #    listenIpv4UuidRef:
+    #      name: <name>
+    # 2. Using the labels
+    #        listenIpv6UuidSelector:
+    #          matchLabels:
+    #            testing.upbound.io/example-name: lb
+    listenIpv4Uuid: <UUID of the IPv4 address>
+    listenIpv6Uuid: <UUID of the IPv6 address>
   providerConfigRef:
     name: default
