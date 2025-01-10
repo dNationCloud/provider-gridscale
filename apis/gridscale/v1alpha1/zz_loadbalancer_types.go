@@ -56,7 +56,16 @@ type ForwardingRuleInitParameters struct {
 
 	// The UUID of a custom certificate.
 	// The UUID of a custom certificate.
+	// +crossplane:generate:reference:type=github.com/dNationCloud/provider-gridscale/apis/ssl/v1alpha1.Certificate
 	CertificateUUID *string `json:"certificateUuid,omitempty" tf:"certificate_uuid,omitempty"`
+
+	// Reference to a Certificate in ssl to populate certificateUuid.
+	// +kubebuilder:validation:Optional
+	CertificateUUIDRef *v1.Reference `json:"certificateUuidRef,omitempty" tf:"-"`
+
+	// Selector for a Certificate in ssl to populate certificateUuid.
+	// +kubebuilder:validation:Optional
+	CertificateUUIDSelector *v1.Selector `json:"certificateUuidSelector,omitempty" tf:"-"`
 
 	// A valid domain name that points to the loadbalancer's IP address.
 	// A valid domain name that points to the loadbalancer's IP address.
@@ -102,8 +111,17 @@ type ForwardingRuleParameters struct {
 
 	// The UUID of a custom certificate.
 	// The UUID of a custom certificate.
+	// +crossplane:generate:reference:type=github.com/dNationCloud/provider-gridscale/apis/ssl/v1alpha1.Certificate
 	// +kubebuilder:validation:Optional
 	CertificateUUID *string `json:"certificateUuid,omitempty" tf:"certificate_uuid,omitempty"`
+
+	// Reference to a Certificate in ssl to populate certificateUuid.
+	// +kubebuilder:validation:Optional
+	CertificateUUIDRef *v1.Reference `json:"certificateUuidRef,omitempty" tf:"-"`
+
+	// Selector for a Certificate in ssl to populate certificateUuid.
+	// +kubebuilder:validation:Optional
+	CertificateUUIDSelector *v1.Selector `json:"certificateUuidSelector,omitempty" tf:"-"`
 
 	// A valid domain name that points to the loadbalancer's IP address.
 	// A valid domain name that points to the loadbalancer's IP address.

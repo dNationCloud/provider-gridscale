@@ -166,6 +166,16 @@ func (in *ForwardingRuleInitParameters) DeepCopyInto(out *ForwardingRuleInitPara
 		*out = new(string)
 		**out = **in
 	}
+	if in.CertificateUUIDRef != nil {
+		in, out := &in.CertificateUUIDRef, &out.CertificateUUIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.CertificateUUIDSelector != nil {
+		in, out := &in.CertificateUUIDSelector, &out.CertificateUUIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.LetsencryptSSL != nil {
 		in, out := &in.LetsencryptSSL, &out.LetsencryptSSL
 		*out = new(string)
@@ -245,6 +255,16 @@ func (in *ForwardingRuleParameters) DeepCopyInto(out *ForwardingRuleParameters) 
 		in, out := &in.CertificateUUID, &out.CertificateUUID
 		*out = new(string)
 		**out = **in
+	}
+	if in.CertificateUUIDRef != nil {
+		in, out := &in.CertificateUUIDRef, &out.CertificateUUIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.CertificateUUIDSelector != nil {
+		in, out := &in.CertificateUUIDSelector, &out.CertificateUUIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.LetsencryptSSL != nil {
 		in, out := &in.LetsencryptSSL, &out.LetsencryptSSL

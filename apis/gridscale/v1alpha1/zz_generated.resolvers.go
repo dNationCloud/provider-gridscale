@@ -9,6 +9,7 @@ package v1alpha1
 import (
 	"context"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
+	v1alpha1 "github.com/dNationCloud/provider-gridscale/apis/ssl/v1alpha1"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -20,6 +21,24 @@ func (mg *Loadbalancer) ResolveReferences(ctx context.Context, c client.Reader) 
 	var rsp reference.ResolutionResponse
 	var err error
 
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.ForwardingRule); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ForwardingRule[i3].CertificateUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.ForwardingRule[i3].CertificateUUIDRef,
+			Selector:     mg.Spec.ForProvider.ForwardingRule[i3].CertificateUUIDSelector,
+			To: reference.To{
+				List:    &v1alpha1.CertificateList{},
+				Managed: &v1alpha1.Certificate{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.ForwardingRule[i3].CertificateUUID")
+		}
+		mg.Spec.ForProvider.ForwardingRule[i3].CertificateUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.ForwardingRule[i3].CertificateUUIDRef = rsp.ResolvedReference
+
+	}
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ListenIPv4UUID),
 		Extract:      reference.ExternalName(),
@@ -52,6 +71,24 @@ func (mg *Loadbalancer) ResolveReferences(ctx context.Context, c client.Reader) 
 	mg.Spec.ForProvider.ListenIPv6UUID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ListenIPv6UUIDRef = rsp.ResolvedReference
 
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.ForwardingRule); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ForwardingRule[i3].CertificateUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.ForwardingRule[i3].CertificateUUIDRef,
+			Selector:     mg.Spec.InitProvider.ForwardingRule[i3].CertificateUUIDSelector,
+			To: reference.To{
+				List:    &v1alpha1.CertificateList{},
+				Managed: &v1alpha1.Certificate{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.ForwardingRule[i3].CertificateUUID")
+		}
+		mg.Spec.InitProvider.ForwardingRule[i3].CertificateUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.ForwardingRule[i3].CertificateUUIDRef = rsp.ResolvedReference
+
+	}
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ListenIPv4UUID),
 		Extract:      reference.ExternalName(),

@@ -19,8 +19,13 @@ func Configure(p *config.Provider) {
 		r.References["listen_ipv6_uuid"] = config.Reference{
 			TerraformName: "gridscale_ipv6",
 		}
+		// Cross Resource Reference for certificate_uuid to gridscale_ssl_certificate
+		r.References["forwarding_rule.certificate_uuid"] = config.Reference{
+			TerraformName: "gridscale_ssl_certificate",
+		}
 		// TODO: Add cross resource reference for the backend_server field once the `gridscale_server` resource will be added
 	})
+	p.AddResourceConfigurator("gridscale_ssl_certificate", func(r *config.Resource) {})
 }
 
 // TODO: Implement timeout logic for the resources.

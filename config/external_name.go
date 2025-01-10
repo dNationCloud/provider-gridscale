@@ -10,11 +10,12 @@ import "github.com/crossplane/upjet/pkg/config"
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Networking
-	"gridscale_ipv4":         config.IdentifierFromProvider,
-	"gridscale_ipv6":         config.IdentifierFromProvider,
-	"gridscale_network":      config.IdentifierFromProvider,
-	"gridscale_sshkey":       config.IdentifierFromProvider,
-	"gridscale_loadbalancer": config.IdentifierFromProvider,
+	"gridscale_ipv4":            config.IdentifierFromProvider,
+	"gridscale_ipv6":            config.IdentifierFromProvider,
+	"gridscale_network":         config.IdentifierFromProvider,
+	"gridscale_sshkey":          config.IdentifierFromProvider,
+	"gridscale_loadbalancer":    config.IdentifierFromProvider,
+	"gridscale_ssl_certificate": config.IdentifierFromProvider,
 
 	// Compute
 	"gridscale_k8s": config.IdentifierFromProvider,
