@@ -1,0 +1,25 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Firewall
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/firewall
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    name: example-firewall
+    rulesV4In:
+    - action: drop
+      comment: some comments
+      dstPort: 20:80
+      order: 0
+      protocol: tcp
+    rulesV6In:
+    - action: drop
+      comment: some comments
+      dstPort: 2000:3000
+      order: 0
+      protocol: tcp
+    timeouts:
+    - create: 10m

@@ -28,7 +28,7 @@ type AutoAssignedServersObservation struct {
 type AutoAssignedServersParameters struct {
 }
 
-type NetworkInitParameters struct {
+type NetworkInitParameters_2 struct {
 
 	// Enable DHCP.
 	// Enable DHCP.
@@ -66,7 +66,7 @@ type NetworkInitParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 }
 
-type NetworkObservation struct {
+type NetworkObservation_2 struct {
 
 	// A list of server UUIDs with the corresponding IPs that are designated by the DHCP server.
 	// A list of server UUIDs with the corresponding IPs that are designated by the DHCP server.
@@ -150,7 +150,7 @@ type NetworkObservation struct {
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 }
 
-type NetworkParameters struct {
+type NetworkParameters_2 struct {
 
 	// Enable DHCP.
 	// Enable DHCP.
@@ -214,7 +214,7 @@ type PinnedServersParameters struct {
 // NetworkSpec defines the desired state of Network
 type NetworkSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     NetworkParameters `json:"forProvider"`
+	ForProvider     NetworkParameters_2 `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -225,13 +225,13 @@ type NetworkSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider NetworkInitParameters `json:"initProvider,omitempty"`
+	InitProvider NetworkInitParameters_2 `json:"initProvider,omitempty"`
 }
 
 // NetworkStatus defines the observed state of Network.
 type NetworkStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        NetworkObservation `json:"atProvider,omitempty"`
+	AtProvider        NetworkObservation_2 `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

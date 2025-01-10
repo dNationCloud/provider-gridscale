@@ -26,6 +26,7 @@ func Configure(p *config.Provider) {
 		// TODO: Add cross resource reference for the backend_server field once the `gridscale_server` resource will be added
 	})
 	p.AddResourceConfigurator("gridscale_ssl_certificate", func(r *config.Resource) {})
+	p.AddResourceConfigurator("gridscale_firewall", func(r *config.Resource) {})
 }
 
 // TODO: Implement timeout logic for the resources.
