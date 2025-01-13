@@ -1,0 +1,19 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Firewall
+metadata:
+  name: example-firewall
+spec:
+  forProvider:
+    name: example-firewall
+    rulesV4In:
+    - action: drop
+      comment: some comments
+      dstPort: 20:80
+      order: 0
+      protocol: tcp
+    rulesV6In:
+    - action: drop
+      comment: some comments
+      dstPort: 2000:3000
+      order: 0
+      protocol: tcp

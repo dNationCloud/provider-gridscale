@@ -9,6 +9,7 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
+	firewall "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/firewall"
 	ipv4 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv4"
 	ipv6 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv6"
 	k8s "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/k8s"
@@ -23,6 +24,7 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		firewall.Setup,
 		ipv4.Setup,
 		ipv6.Setup,
 		k8s.Setup,

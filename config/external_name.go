@@ -16,6 +16,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"gridscale_sshkey":          config.IdentifierFromProvider,
 	"gridscale_loadbalancer":    config.IdentifierFromProvider,
 	"gridscale_ssl_certificate": config.IdentifierFromProvider,
+	"gridscale_firewall":        config.IdentifierFromProvider,
 
 	// Compute
 	"gridscale_k8s": config.IdentifierFromProvider,
