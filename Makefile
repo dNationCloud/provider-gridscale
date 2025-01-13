@@ -11,12 +11,12 @@ export TERRAFORM_VERSION ?= 1.5.7
 TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAFORM_VERSION)\n1.6" | sort -V | head -n1`" ] && echo 1 || echo 0)
 
 export TERRAFORM_PROVIDER_SOURCE ?= gridscale/gridscale
-export TERRAFORM_PROVIDER_REPO ?= https://github.com/gridscale/terraform-provider-gridscale
-# TODO: 1.27.0 not yet in https://releases.hashicorp.com/terraform-provider-gridscale
-export TERRAFORM_PROVIDER_VERSION ?= 1.26.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-gridscale
-export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
-export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-gridscale_v1.26.0
+export TERRAFORM_PROVIDER_REPO ?= https://github.com/gridscale/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)
+export TERRAFORM_PROVIDER_VERSION ?= 2.0.2
+# https://releases.hashicorp.com/ replaced by https://github.com/gridscale/, see https://github.com/gridscale/terraform-provider-gridscale/issues/416
+export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= $(TERRAFORM_PROVIDER_REPO)/releases/download/v$(TERRAFORM_PROVIDER_VERSION)
+export TERRAFORM_NATIVE_PROVIDER_BINARY ?= $(TERRAFORM_PROVIDER_DOWNLOAD_NAME)_v$(TERRAFORM_PROVIDER_VERSION)
 export TERRAFORM_DOCS_PATH ?= website/docs/r
 
 

@@ -10,11 +10,16 @@ spec:
   forProvider:
     name: test
     nodePool:
-    - cores: 1
-      memory: 2
-      name: my_node_pool
+    - cores: 2
+      memory: 4
+      name: pool-0
       nodeCount: 2
-      rocketStorage: 90
-      storage: 10
+      storage: 30
       storageType: storage_insane
-    release: "1.26"
+    - cores: 1
+      memory: 3
+      name: pool-1
+      nodeCount: 3
+      storage: 30
+      storageType: storage_insane
+    release: "1.30"
