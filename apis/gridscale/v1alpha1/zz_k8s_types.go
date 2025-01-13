@@ -81,6 +81,20 @@ type K8SInitParameters struct {
 	SecurityZoneUUID *string `json:"securityZoneUuid,omitempty" tf:"security_zone_uuid,omitempty"`
 }
 
+type K8SListenPortInitParameters struct {
+}
+
+type K8SListenPortObservation struct {
+
+	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+}
+
+type K8SListenPortParameters struct {
+}
+
 type K8SObservation struct {
 
 	// Defines the date and time of the last object change.
@@ -107,7 +121,7 @@ type K8SObservation struct {
 	Labels []*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
 	// The port number where this k8s service accepts connections.
-	ListenPort []ListenPortObservation `json:"listenPort,omitempty" tf:"listen_port,omitempty"`
+	ListenPort []K8SListenPortObservation `json:"listenPort,omitempty" tf:"listen_port,omitempty"`
 
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
@@ -264,20 +278,6 @@ type K8SParameters struct {
 	// Security zone UUID linked to PaaS service.
 	// +kubebuilder:validation:Optional
 	SecurityZoneUUID *string `json:"securityZoneUuid,omitempty" tf:"security_zone_uuid,omitempty"`
-}
-
-type ListenPortInitParameters struct {
-}
-
-type ListenPortObservation struct {
-
-	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
-
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
-}
-
-type ListenPortParameters struct {
 }
 
 type NodePoolInitParameters struct {

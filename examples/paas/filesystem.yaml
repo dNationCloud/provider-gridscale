@@ -1,0 +1,12 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Filesystem
+metadata:
+  name: filesystem-test
+spec:
+  forProvider:
+    name: filesystem-test
+    release: "1"
+    performanceClass: standard
+    rootSquash: true
+  providerConfigRef:
+    name: default
