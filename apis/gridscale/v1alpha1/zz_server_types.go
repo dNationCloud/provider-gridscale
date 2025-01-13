@@ -590,7 +590,7 @@ type NetworkRulesV6OutParameters struct {
 	SrcPort *string `json:"srcPort,omitempty" tf:"src_port,omitempty"`
 }
 
-type ServerInitParameters struct {
+type ServerInitParameters_2 struct {
 
 	// If the server should be auto-started in case of a failure (default=true).
 	// If the server should be auto-started in case of a failure (default=true).
@@ -637,7 +637,16 @@ type ServerInitParameters struct {
 	IPv6Selector *v1.Selector `json:"ipv6Selector,omitempty" tf:"-"`
 
 	// The UUID of an ISO image in gridscale. The server will automatically boot from the ISO if one was added. The UUIDs of ISO images can be found in the expert panel.
+	// +crossplane:generate:reference:type=github.com/dNationCloud/provider-gridscale/apis/gridscale/v1alpha1.Isoimage
 	Isoimage *string `json:"isoimage,omitempty" tf:"isoimage,omitempty"`
+
+	// Reference to a Isoimage in gridscale to populate isoimage.
+	// +kubebuilder:validation:Optional
+	IsoimageRef *v1.Reference `json:"isoimageRef,omitempty" tf:"-"`
+
+	// Selector for a Isoimage in gridscale to populate isoimage.
+	// +kubebuilder:validation:Optional
+	IsoimageSelector *v1.Selector `json:"isoimageSelector,omitempty" tf:"-"`
 
 	// List of labels in the format [ "label1", "label2" ].
 	// List of labels.
@@ -822,7 +831,7 @@ type ServerNetworkParameters struct {
 	RulesV6Out []NetworkRulesV6OutParameters `json:"rulesV6Out,omitempty" tf:"rules_v6_out,omitempty"`
 }
 
-type ServerObservation struct {
+type ServerObservation_2 struct {
 
 	// If the server should be auto-started in case of a failure (default=true).
 	// If the server should be auto-started in case of a failure (default=true).
@@ -915,7 +924,7 @@ type ServerObservation struct {
 	UserDataBase64 *string `json:"userDataBase64,omitempty" tf:"user_data_base64,omitempty"`
 }
 
-type ServerParameters struct {
+type ServerParameters_2 struct {
 
 	// If the server should be auto-started in case of a failure (default=true).
 	// If the server should be auto-started in case of a failure (default=true).
@@ -969,8 +978,17 @@ type ServerParameters struct {
 	IPv6Selector *v1.Selector `json:"ipv6Selector,omitempty" tf:"-"`
 
 	// The UUID of an ISO image in gridscale. The server will automatically boot from the ISO if one was added. The UUIDs of ISO images can be found in the expert panel.
+	// +crossplane:generate:reference:type=github.com/dNationCloud/provider-gridscale/apis/gridscale/v1alpha1.Isoimage
 	// +kubebuilder:validation:Optional
 	Isoimage *string `json:"isoimage,omitempty" tf:"isoimage,omitempty"`
+
+	// Reference to a Isoimage in gridscale to populate isoimage.
+	// +kubebuilder:validation:Optional
+	IsoimageRef *v1.Reference `json:"isoimageRef,omitempty" tf:"-"`
+
+	// Selector for a Isoimage in gridscale to populate isoimage.
+	// +kubebuilder:validation:Optional
+	IsoimageSelector *v1.Selector `json:"isoimageSelector,omitempty" tf:"-"`
 
 	// List of labels in the format [ "label1", "label2" ].
 	// List of labels.
@@ -1081,7 +1099,7 @@ type StorageParameters struct {
 // ServerSpec defines the desired state of Server
 type ServerSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     ServerParameters `json:"forProvider"`
+	ForProvider     ServerParameters_2 `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -1092,13 +1110,13 @@ type ServerSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider ServerInitParameters `json:"initProvider,omitempty"`
+	InitProvider ServerInitParameters_2 `json:"initProvider,omitempty"`
 }
 
 // ServerStatus defines the observed state of Server.
 type ServerStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        ServerObservation `json:"atProvider,omitempty"`
+	AtProvider        ServerObservation_2 `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -163,6 +163,22 @@ func (mg *Server) ResolveReferences(ctx context.Context, c client.Reader) error 
 	mg.Spec.ForProvider.IPv6 = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.IPv6Ref = rsp.ResolvedReference
 
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Isoimage),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.IsoimageRef,
+		Selector:     mg.Spec.ForProvider.IsoimageSelector,
+		To: reference.To{
+			List:    &IsoimageList{},
+			Managed: &Isoimage{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.Isoimage")
+	}
+	mg.Spec.ForProvider.Isoimage = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IsoimageRef = rsp.ResolvedReference
+
 	for i3 := 0; i3 < len(mg.Spec.ForProvider.Network); i3++ {
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Network[i3].FirewallTemplateUUID),
@@ -248,6 +264,22 @@ func (mg *Server) ResolveReferences(ctx context.Context, c client.Reader) error 
 	}
 	mg.Spec.InitProvider.IPv6 = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.IPv6Ref = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Isoimage),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.IsoimageRef,
+		Selector:     mg.Spec.InitProvider.IsoimageSelector,
+		To: reference.To{
+			List:    &IsoimageList{},
+			Managed: &Isoimage{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.Isoimage")
+	}
+	mg.Spec.InitProvider.Isoimage = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IsoimageRef = rsp.ResolvedReference
 
 	for i3 := 0; i3 < len(mg.Spec.InitProvider.Network); i3++ {
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{

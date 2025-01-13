@@ -26,10 +26,10 @@ func Configure(p *config.Provider) {
 			TerraformName: "gridscale_firewall",
 		}
 
-		// TODO: Cross Resource Reference for isoimage to gridscale_isoimage
-		// r.References["isoimage"] = config.Reference{
-		// 	TerraformName: "gridscale_isoimage",
-		// }
+		// Cross Resource Reference for isoimage to gridscale_isoimage
+		r.References["isoimage"] = config.Reference{
+			TerraformName: "gridscale_isoimage",
+		}
 
 		// Cross Resource Reference for ipv4 to gridscale_ipv4
 		r.References["ipv4"] = config.Reference{
