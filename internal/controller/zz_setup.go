@@ -15,7 +15,11 @@ import (
 	k8s "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/k8s"
 	loadbalancer "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/loadbalancer"
 	network "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/network"
+	server "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/server"
+	snapshot "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/snapshot"
 	sshkey "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/sshkey"
+	storage "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/storage"
+	template "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/template"
 	providerconfig "github.com/dNationCloud/provider-gridscale/internal/controller/providerconfig"
 	certificate "github.com/dNationCloud/provider-gridscale/internal/controller/ssl/certificate"
 )
@@ -30,7 +34,11 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		k8s.Setup,
 		loadbalancer.Setup,
 		network.Setup,
+		server.Setup,
+		snapshot.Setup,
 		sshkey.Setup,
+		storage.Setup,
+		template.Setup,
 		providerconfig.Setup,
 		certificate.Setup,
 	} {

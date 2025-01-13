@@ -1,0 +1,31 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Template
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/template
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    name: newname
+    snapshotUuidSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo
+    timeouts:
+    - create: 10m
+
+---
+
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Storage
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/template
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    capacity: 1
+    name: newname

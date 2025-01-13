@@ -12,6 +12,7 @@ import (
 
 	"github.com/dNationCloud/provider-gridscale/config/compute"
 	"github.com/dNationCloud/provider-gridscale/config/networking"
+	"github.com/dNationCloud/provider-gridscale/config/storage"
 )
 
 const (
@@ -39,6 +40,7 @@ func GetProvider() *ujconfig.Provider {
 		// add custom config functions
 		networking.Configure,
 		compute.Configure,
+		storage.Configure,
 	} {
 		configure(pc)
 	}
