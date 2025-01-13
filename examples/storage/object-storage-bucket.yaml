@@ -1,0 +1,30 @@
+apiVersion: object.crossplane.io/v1alpha1
+kind: StorageAccesskey
+metadata:
+  name: object-storage-access-key-example
+spec:
+  forProvider:
+    comment: object-storage-access-key-example
+  providerConfigRef:
+    name: default
+  writeConnectionSecretToRef:
+    name: object-storage-access-key-secret
+    namespace: crossplane-system
+---
+apiVersion: object.crossplane.io/v1alpha1
+kind: StorageBucket
+metadata:
+  name: object-storage-bucket-example
+spec:
+  forProvider:
+    bucketName: object-storage-bucket-example
+    accessKeySecretRef:
+      name: object-storage-access-key-secret
+      namespace: crossplane-system
+      key: attribute.access_key
+    secretKeySecretRef:
+      name: object-storage-access-key-secret
+      namespace: crossplane-system
+      key: attribute.secret_key
+  providerConfigRef:
+    name: default
