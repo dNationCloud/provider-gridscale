@@ -1,0 +1,10 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Isoimage
+metadata:
+  name: isoimage-test
+spec:
+  forProvider:
+    sourceUrl: "http://tinycorelinux.net/10.x/x86/release/TinyCore-current.iso"
+    name: isoimage-test
+  providerConfigRef:
+    name: default

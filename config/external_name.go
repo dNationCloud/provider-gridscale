@@ -19,7 +19,14 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"gridscale_firewall":        config.IdentifierFromProvider,
 
 	// Compute
-	"gridscale_k8s": config.IdentifierFromProvider,
+	"gridscale_k8s":    config.IdentifierFromProvider,
+	"gridscale_server": config.IdentifierFromProvider,
+
+	// Storage
+	"gridscale_storage":  config.IdentifierFromProvider,
+	"gridscale_template": config.IdentifierFromProvider,
+	"gridscale_snapshot": config.IdentifierFromProvider,
+	"gridscale_isoimage": config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

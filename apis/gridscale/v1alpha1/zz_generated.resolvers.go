@@ -123,3 +123,386 @@ func (mg *Loadbalancer) ResolveReferences(ctx context.Context, c client.Reader) 
 
 	return nil
 }
+
+// ResolveReferences of this Server.
+func (mg *Server) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IPv4),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.IPv4Ref,
+		Selector:     mg.Spec.ForProvider.IPv4Selector,
+		To: reference.To{
+			List:    &IPv4List{},
+			Managed: &IPv4{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IPv4")
+	}
+	mg.Spec.ForProvider.IPv4 = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IPv4Ref = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.IPv6),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.IPv6Ref,
+		Selector:     mg.Spec.ForProvider.IPv6Selector,
+		To: reference.To{
+			List:    &IPv6List{},
+			Managed: &IPv6{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.IPv6")
+	}
+	mg.Spec.ForProvider.IPv6 = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IPv6Ref = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Isoimage),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.IsoimageRef,
+		Selector:     mg.Spec.ForProvider.IsoimageSelector,
+		To: reference.To{
+			List:    &IsoimageList{},
+			Managed: &Isoimage{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.Isoimage")
+	}
+	mg.Spec.ForProvider.Isoimage = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.IsoimageRef = rsp.ResolvedReference
+
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.Network); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Network[i3].FirewallTemplateUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.Network[i3].FirewallTemplateUUIDRef,
+			Selector:     mg.Spec.ForProvider.Network[i3].FirewallTemplateUUIDSelector,
+			To: reference.To{
+				List:    &FirewallList{},
+				Managed: &Firewall{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.Network[i3].FirewallTemplateUUID")
+		}
+		mg.Spec.ForProvider.Network[i3].FirewallTemplateUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.Network[i3].FirewallTemplateUUIDRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.Network); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Network[i3].ObjectUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.Network[i3].ObjectUUIDRef,
+			Selector:     mg.Spec.ForProvider.Network[i3].ObjectUUIDSelector,
+			To: reference.To{
+				List:    &NetworkList{},
+				Managed: &Network{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.Network[i3].ObjectUUID")
+		}
+		mg.Spec.ForProvider.Network[i3].ObjectUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.Network[i3].ObjectUUIDRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.Storage); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Storage[i3].ObjectUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.Storage[i3].ObjectUUIDRef,
+			Selector:     mg.Spec.ForProvider.Storage[i3].ObjectUUIDSelector,
+			To: reference.To{
+				List:    &StorageList{},
+				Managed: &Storage{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.Storage[i3].ObjectUUID")
+		}
+		mg.Spec.ForProvider.Storage[i3].ObjectUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.Storage[i3].ObjectUUIDRef = rsp.ResolvedReference
+
+	}
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IPv4),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.IPv4Ref,
+		Selector:     mg.Spec.InitProvider.IPv4Selector,
+		To: reference.To{
+			List:    &IPv4List{},
+			Managed: &IPv4{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IPv4")
+	}
+	mg.Spec.InitProvider.IPv4 = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IPv4Ref = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.IPv6),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.IPv6Ref,
+		Selector:     mg.Spec.InitProvider.IPv6Selector,
+		To: reference.To{
+			List:    &IPv6List{},
+			Managed: &IPv6{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.IPv6")
+	}
+	mg.Spec.InitProvider.IPv6 = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IPv6Ref = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Isoimage),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.IsoimageRef,
+		Selector:     mg.Spec.InitProvider.IsoimageSelector,
+		To: reference.To{
+			List:    &IsoimageList{},
+			Managed: &Isoimage{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.Isoimage")
+	}
+	mg.Spec.InitProvider.Isoimage = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.IsoimageRef = rsp.ResolvedReference
+
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.Network); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Network[i3].FirewallTemplateUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.Network[i3].FirewallTemplateUUIDRef,
+			Selector:     mg.Spec.InitProvider.Network[i3].FirewallTemplateUUIDSelector,
+			To: reference.To{
+				List:    &FirewallList{},
+				Managed: &Firewall{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.Network[i3].FirewallTemplateUUID")
+		}
+		mg.Spec.InitProvider.Network[i3].FirewallTemplateUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.Network[i3].FirewallTemplateUUIDRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.Network); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Network[i3].ObjectUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.Network[i3].ObjectUUIDRef,
+			Selector:     mg.Spec.InitProvider.Network[i3].ObjectUUIDSelector,
+			To: reference.To{
+				List:    &NetworkList{},
+				Managed: &Network{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.Network[i3].ObjectUUID")
+		}
+		mg.Spec.InitProvider.Network[i3].ObjectUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.Network[i3].ObjectUUIDRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.Storage); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Storage[i3].ObjectUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.Storage[i3].ObjectUUIDRef,
+			Selector:     mg.Spec.InitProvider.Storage[i3].ObjectUUIDSelector,
+			To: reference.To{
+				List:    &StorageList{},
+				Managed: &Storage{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.Storage[i3].ObjectUUID")
+		}
+		mg.Spec.InitProvider.Storage[i3].ObjectUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.Storage[i3].ObjectUUIDRef = rsp.ResolvedReference
+
+	}
+
+	return nil
+}
+
+// ResolveReferences of this Snapshot.
+func (mg *Snapshot) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.StorageUUID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.StorageUUIDRef,
+		Selector:     mg.Spec.ForProvider.StorageUUIDSelector,
+		To: reference.To{
+			List:    &StorageList{},
+			Managed: &Storage{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.StorageUUID")
+	}
+	mg.Spec.ForProvider.StorageUUID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.StorageUUIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.StorageUUID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.StorageUUIDRef,
+		Selector:     mg.Spec.InitProvider.StorageUUIDSelector,
+		To: reference.To{
+			List:    &StorageList{},
+			Managed: &Storage{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.StorageUUID")
+	}
+	mg.Spec.InitProvider.StorageUUID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.StorageUUIDRef = rsp.ResolvedReference
+
+	return nil
+}
+
+// ResolveReferences of this Storage.
+func (mg *Storage) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var mrsp reference.MultiResolutionResponse
+	var err error
+
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.Template); i3++ {
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.Template[i3].Sshkeys),
+			Extract:       reference.ExternalName(),
+			References:    mg.Spec.ForProvider.Template[i3].SshkeysRefs,
+			Selector:      mg.Spec.ForProvider.Template[i3].SshkeysSelector,
+			To: reference.To{
+				List:    &SshkeyList{},
+				Managed: &Sshkey{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.Template[i3].Sshkeys")
+		}
+		mg.Spec.ForProvider.Template[i3].Sshkeys = reference.ToPtrValues(mrsp.ResolvedValues)
+		mg.Spec.ForProvider.Template[i3].SshkeysRefs = mrsp.ResolvedReferences
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.Template); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Template[i3].TemplateUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.ForProvider.Template[i3].TemplateUUIDRef,
+			Selector:     mg.Spec.ForProvider.Template[i3].TemplateUUIDSelector,
+			To: reference.To{
+				List:    &TemplateList{},
+				Managed: &Template{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.Template[i3].TemplateUUID")
+		}
+		mg.Spec.ForProvider.Template[i3].TemplateUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.Template[i3].TemplateUUIDRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.Template); i3++ {
+		mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+			CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.Template[i3].Sshkeys),
+			Extract:       reference.ExternalName(),
+			References:    mg.Spec.InitProvider.Template[i3].SshkeysRefs,
+			Selector:      mg.Spec.InitProvider.Template[i3].SshkeysSelector,
+			To: reference.To{
+				List:    &SshkeyList{},
+				Managed: &Sshkey{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.Template[i3].Sshkeys")
+		}
+		mg.Spec.InitProvider.Template[i3].Sshkeys = reference.ToPtrValues(mrsp.ResolvedValues)
+		mg.Spec.InitProvider.Template[i3].SshkeysRefs = mrsp.ResolvedReferences
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.Template); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Template[i3].TemplateUUID),
+			Extract:      reference.ExternalName(),
+			Reference:    mg.Spec.InitProvider.Template[i3].TemplateUUIDRef,
+			Selector:     mg.Spec.InitProvider.Template[i3].TemplateUUIDSelector,
+			To: reference.To{
+				List:    &TemplateList{},
+				Managed: &Template{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.Template[i3].TemplateUUID")
+		}
+		mg.Spec.InitProvider.Template[i3].TemplateUUID = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.Template[i3].TemplateUUIDRef = rsp.ResolvedReference
+
+	}
+
+	return nil
+}
+
+// ResolveReferences of this Template.
+func (mg *Template) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.SnapshotUUID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.SnapshotUUIDRef,
+		Selector:     mg.Spec.ForProvider.SnapshotUUIDSelector,
+		To: reference.To{
+			List:    &SnapshotList{},
+			Managed: &Snapshot{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.SnapshotUUID")
+	}
+	mg.Spec.ForProvider.SnapshotUUID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.SnapshotUUIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.SnapshotUUID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.SnapshotUUIDRef,
+		Selector:     mg.Spec.InitProvider.SnapshotUUIDSelector,
+		To: reference.To{
+			List:    &SnapshotList{},
+			Managed: &Snapshot{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.SnapshotUUID")
+	}
+	mg.Spec.InitProvider.SnapshotUUID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.SnapshotUUIDRef = rsp.ResolvedReference
+
+	return nil
+}

@@ -1,0 +1,33 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Server
+metadata:
+  annotations:
+    meta.upbound.io/example-id: gridscale/v1alpha1/server
+  labels:
+    testing.upbound.io/example-name: terra-server-test
+  name: terra-server-test
+spec:
+  forProvider:
+    cores: 2
+    ipv4Selector:
+      matchLabels:
+        testing.upbound.io/example-name: terra-ipv4-test
+    isoimageSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    memory: 1
+    name: terra-server-test
+    network:
+    - bootdevice: true
+      objectUuidSelector:
+        matchLabels:
+          testing.upbound.io/example-name: terra-network-test
+    - objectUuidSelector:
+        matchLabels:
+          testing.upbound.io/example-name: terra-network-test-2
+    storage:
+    - objectUuidSelector:
+        matchLabels:
+          testing.upbound.io/example-name: terra-storage-test
+    timeouts:
+    - create: 10m

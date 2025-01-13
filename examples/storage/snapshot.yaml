@@ -1,0 +1,22 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Storage
+metadata:
+  name: storage-test
+spec:
+  forProvider:
+    capacity: 10
+    name: storage-test
+  providerConfigRef:
+    name: default
+---
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-test
+spec:
+  forProvider:
+    name: snapshot-test
+    storageUuidRef:
+      name: storage-test
+  providerConfigRef:
+    name: default

@@ -1,0 +1,56 @@
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: IPv4
+metadata:
+  name: ipv4-test
+spec:
+  forProvider:
+    name: test-ipv4
+  providerConfigRef:
+    name: default
+---
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Sshkey
+metadata:
+  name: sshkey-test
+spec:
+  forProvider:
+    name: test-sshkey
+    sshkey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQPuRe1Z/WiG1399QQ0zePbpVo7INnH4C16mdjysABJ someexamplekey
+  providerConfigRef:
+    name: default
+---
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Storage
+metadata:
+  name: storage-test
+spec:
+  forProvider:
+    capacity: 20
+    name: storage-test
+    template:
+    - templateUuid: b308d75e-b8fb-4c90-87dc-f909879ae08c # Ubuntu 24.04 LTS
+      sshkeysRefs:
+      - name: sshkey-test
+  providerConfigRef:
+    name: default
+---
+apiVersion: gridscale.crossplane.io/v1alpha1
+kind: Server
+metadata:
+  name: server-test
+spec:
+  forProvider:
+    name: server-test
+    cores: 2
+    memory: 4
+    power: true
+    network:
+    - objectUuid: 4e367a62-5b72-4d5b-8bc6-b4e8bba66fff # Public network
+      bootdevice: true
+    ipv4Ref:
+      name: ipv4-test # ssh root@$(kubectl get ipv4 ipv4-test -ojsonpath='{.status.atProvider.ip}')
+    storage:
+    - objectUuidRef:
+        name: storage-test
+  providerConfigRef:
+    name: default
