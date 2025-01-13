@@ -27,6 +27,9 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"gridscale_template": config.IdentifierFromProvider,
 	"gridscale_snapshot": config.IdentifierFromProvider,
 	"gridscale_isoimage": config.IdentifierFromProvider,
+
+	// PaaS
+	"gridscale_filesystem": config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
