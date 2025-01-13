@@ -32,6 +32,7 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("gridscale_isoimage", func(r *config.Resource) {})
 	p.AddResourceConfigurator("gridscale_object_storage_accesskey", func(r *config.Resource) {})
+	p.AddResourceConfigurator("gridscale_object_storage_bucket", func(r *config.Resource) {})
 }
 
 // TODO: Implement timeout logic for the resources.

@@ -23,6 +23,7 @@ import (
 	storage "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/storage"
 	template "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/template"
 	storageaccesskey "github.com/dNationCloud/provider-gridscale/internal/controller/object/storageaccesskey"
+	storagebucket "github.com/dNationCloud/provider-gridscale/internal/controller/object/storagebucket"
 	providerconfig "github.com/dNationCloud/provider-gridscale/internal/controller/providerconfig"
 	certificate "github.com/dNationCloud/provider-gridscale/internal/controller/ssl/certificate"
 )
@@ -45,6 +46,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		storage.Setup,
 		template.Setup,
 		storageaccesskey.Setup,
+		storagebucket.Setup,
 		providerconfig.Setup,
 		certificate.Setup,
 	} {

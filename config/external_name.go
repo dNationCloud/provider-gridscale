@@ -28,6 +28,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"gridscale_snapshot":                 config.IdentifierFromProvider,
 	"gridscale_isoimage":                 config.IdentifierFromProvider,
 	"gridscale_object_storage_accesskey": config.IdentifierFromProvider,
+	"gridscale_object_storage_bucket":    config.IdentifierFromProvider,
 
 	// PaaS
 	"gridscale_filesystem": config.IdentifierFromProvider,
