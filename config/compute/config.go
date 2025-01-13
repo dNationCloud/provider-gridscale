@@ -6,12 +6,12 @@ import (
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
-	p.AddResourceConfigurator("gridscale_k8s", func(r *config.Resource) {
-		// TODO: Investigate cross resource reference for the security_zone_uuid
-		// r.References["security_zone_uuid"] = config.Reference{
-		// 	TerraformName: "gridscale_paas_securityzone",
-		// }
-	})
+	// p.AddResourceConfigurator("gridscale_k8s", func(r *config.Resource) {
+	// 	// TODO: Investigate cross resource reference for the security_zone_uuid
+	// 	// r.References["security_zone_uuid"] = config.Reference{
+	// 	// 	TerraformName: "gridscale_paas_securityzone",
+	// 	// }
+	// })
 	p.AddResourceConfigurator("gridscale_server", func(r *config.Resource) {
 		// Cross Resource Reference for storage.object_uuid to gridscale_storage
 		r.References["storage.object_uuid"] = config.Reference{
