@@ -1,0 +1,9 @@
+apiVersion: object.crossplane.io/v1alpha1
+kind: StorageAccesskey
+metadata:
+  name: storage-access-key-example
+spec:
+  forProvider:
+    comment: storage-access-key-example
+  providerConfigRef:
+    name: default

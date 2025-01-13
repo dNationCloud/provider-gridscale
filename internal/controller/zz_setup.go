@@ -22,6 +22,7 @@ import (
 	sshkey "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/sshkey"
 	storage "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/storage"
 	template "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/template"
+	storageaccesskey "github.com/dNationCloud/provider-gridscale/internal/controller/object/storageaccesskey"
 	providerconfig "github.com/dNationCloud/provider-gridscale/internal/controller/providerconfig"
 	certificate "github.com/dNationCloud/provider-gridscale/internal/controller/ssl/certificate"
 )
@@ -43,6 +44,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		sshkey.Setup,
 		storage.Setup,
 		template.Setup,
+		storageaccesskey.Setup,
 		providerconfig.Setup,
 		certificate.Setup,
 	} {
