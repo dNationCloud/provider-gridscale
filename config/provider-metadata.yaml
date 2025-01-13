@@ -189,34 +189,49 @@ resources:
                   "name": "test",
                   "node_pool": [
                     {
-                      "cores": 1,
-                      "memory": 2,
-                      "name": "my_node_pool",
+                      "cores": 2,
+                      "memory": 4,
+                      "name": "pool-0",
                       "node_count": 2,
-                      "rocket_storage": 90,
-                      "storage": 10,
+                      "storage": 30,
+                      "storage_type": "storage_insane"
+                    },
+                    {
+                      "cores": 1,
+                      "memory": 3,
+                      "name": "pool-1",
+                      "node_count": 3,
+                      "storage": 30,
                       "storage_type": "storage_insane"
                     }
                   ],
-                  "release": "1.26"
+                  "release": "1.30"
                 }
         argumentDocs:
             change_time: '- Defines the date and time of the last object change.'
             cluster_cidr: '- (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).'
             cluster_traffic_encryption: '- Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.'
-            cores: '- Cores per worker node.'
+            cores: '- See Argument Reference above.'
             create: '- (Default value is "45m" - 45 minutes) Used for creating a resource.'
             create_time: '- The time the object was created.'
             delete: '- (Default value is "45m" - 45 minutes) Used for deleting a resource.'
-            gsk_version: '- (Optional) The gridscale''s Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.'
+            gsk_version: '- (Optional) The gridscale''s Kubernetes version of this instance (e.g. "1.30.3-gs0"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.'
+            k8s_hubble: '- (Optional) Enable Hubble for the k8s cluster.'
             k8s_private_network_uuid: '- Private network UUID which k8s nodes are attached to. It can be used to attach other PaaS/VMs.'
             kubeconfig: '- The kubeconfig file content of the k8s cluster.'
             labels: '- (Optional) List of labels in the format [ "label1", "label2" ].'
-            memory: '- Memory per worker node (in GiB).'
+            memory: '- See Argument Reference above.'
             name: '- (Required) The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.'
             network_uuid: '- DEPRECATED  Network UUID containing security zone, which is linked to the k8s cluster.'
-            node_count: '- Number of worker nodes.'
-            node_pool: '- (Required) Node pool''s specification. NOTE: The node pool''s specification is not yet mutable (except node_count).'
+            node_count: '- See Argument Reference above.'
+            node_pool: '- (Required) The collection of node pool specifications. Mutiple node pools can be defined with multiple node_pool blocks. The node pool block supports the following arguments:'
+            node_pool.cores: '- Cores per worker node.'
+            node_pool.memory: '- Memory per worker node (in GiB).'
+            node_pool.name: '- Name of the node pool.'
+            node_pool.node_count: '- Number of worker nodes.'
+            node_pool.rocket_storage: '- Rocket storage per worker node (in GiB).'
+            node_pool.storage: '- Storage per worker node (in GiB).'
+            node_pool.storage_type: '- Storage type (one of storage, storage_high, storage_insane).'
             oidc_ca_pem: '- (Optional) Custom CA from customer in pem format as string.'
             oidc_client_id: '- (Optional) A client ID that all tokens must be issued for.'
             oidc_enabled: '- (Optional) Enable OIDC for the k8s cluster.'
@@ -228,13 +243,13 @@ resources:
             oidc_username_claim: '- (Optional) JWT claim to use as the user name.'
             oidc_username_prefix: '- (Optional) Prefix prepended to username claims to prevent clashes with existing names (such as system: users). For example, the value oidc: will create usernames like oidc:jane.doe. If this flag isn''t provided and --oidc-username-claim is a value other than email the prefix defaults to ( Issuer URL )# where ( Issuer URL ) is the value of --oidc-issuer-url. The value - can be used to disable all prefixing.'
             release: '- (Optional) The Kubernetes release of this instance. Define which release will be used to create the cluster. For convenience, please use gscloud to get the list of available releases. NOTE: Either gsk_version or release is set at a time.'
-            rocket_storage: '- Rocket storage per worker node (in GiB).'
+            rocket_storage: '- See Argument Reference above.'
             security_zone_uuid: '-  DEPRECATED (Optional, Forcenew) Security zone UUID linked to the Kubernetes resource. If security_zone_uuid is not set, the default security zone will be created (if it doesn''t exist) and linked. A change of this argument necessitates the re-creation of the resource.'
             service_template_category: '- The template service''s category used to create the service.'
             service_template_uuid: '- PaaS service template that k8s service uses. The service_template_uuid may not relate to release, if service_template_uuid/release is updated outside of terraform (e.g. the k8s service is upgraded by gridscale staffs).'
             status: '- status indicates the status of the object.'
-            storage: '- Storage per worker node (in GiB).'
-            storage_type: '- Storage type (one of storage, storage_high, storage_insane).'
+            storage: '- See Argument Reference above.'
+            storage_type: '- See Argument Reference above.'
             surge_node: '- Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).'
             update: '- (Default value is "45m" - 45 minutes) Used for updating a resource.'
             usage_in_minutes: '- The amount of minutes the IP address has been in use.'

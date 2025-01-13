@@ -10,7 +10,6 @@ spec:
       memory: 2
       name: my_node_pool
       nodeCount: 2
-      # rocketStorage: 70
       storage: 30
       storageType: storage_insane
     release: "1.27"

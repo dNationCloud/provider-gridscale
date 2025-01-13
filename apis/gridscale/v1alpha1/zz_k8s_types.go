@@ -15,21 +15,63 @@ import (
 
 type K8SInitParameters struct {
 
-	// The gridscale's Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
+	// Enable Kubernetes audit logs.
+	AuditLogEnabled *bool `json:"auditLogEnabled,omitempty" tf:"audit_log_enabled,omitempty"`
+
+	// Audit log level.
+	AuditLogLevel *string `json:"auditLogLevel,omitempty" tf:"audit_log_level,omitempty"`
+
+	// (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
+	// The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
+	ClusterCidr *string `json:"clusterCidr,omitempty" tf:"cluster_cidr,omitempty"`
+
+	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+	ClusterTrafficEncryption *bool `json:"clusterTrafficEncryption,omitempty" tf:"cluster_traffic_encryption,omitempty"`
+
+	// The gridscale's Kubernetes version of this instance (e.g. "1.30.3-gs0"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
 	// The gridscale k8s PaaS version (issued by gridscale) of this instance.
 	GskVersion *string `json:"gskVersion,omitempty" tf:"gsk_version,omitempty"`
+
+	// Enable hubble integration.
+	Hubble *bool `json:"hubble,omitempty" tf:"hubble,omitempty"`
+
+	// Enable Hubble for the k8s cluster.
+	// Enables Hubble Integration.
+	K8SHubble *bool `json:"k8sHubble,omitempty" tf:"k8s_hubble,omitempty"`
+
+	// Enable kube-apiserver logs.
+	KubeApiserverLogEnabled *bool `json:"kubeApiserverLogEnabled,omitempty" tf:"kube_apiserver_log_enabled,omitempty"`
 
 	// List of labels in the format [ "label1", "label2" ].
 	// List of labels.
 	// +listType=set
 	Labels []*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
+	// Enable control plane log delivery.
+	LogDelivery *bool `json:"logDelivery,omitempty" tf:"log_delivery,omitempty"`
+
+	// Access key used to authenticate against Object Storage endpoint.
+	LogDeliveryAccessKey *string `json:"logDeliveryAccessKey,omitempty" tf:"log_delivery_access_key,omitempty"`
+
+	// Bucket to upload logs to.
+	LogDeliveryBucket *string `json:"logDeliveryBucket,omitempty" tf:"log_delivery_bucket,omitempty"`
+
+	// Object Storage endpoint URL the bucket is located on.
+	LogDeliveryEndpoint *string `json:"logDeliveryEndpoint,omitempty" tf:"log_delivery_endpoint,omitempty"`
+
+	// Time interval (in min), at which log files will be delivered, unless file size limit is reached first.
+	LogDeliveryInterval *float64 `json:"logDeliveryInterval,omitempty" tf:"log_delivery_interval,omitempty"`
+
+	// Secret key used to authenticate against Object Storage endpoint.
+	LogDeliverySecretKey *string `json:"logDeliverySecretKey,omitempty" tf:"log_delivery_secret_key,omitempty"`
+
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Node pool's specification. NOTE: The node pool's specification is not yet mutable (except node_count).
-	// Node pool's specification.
+	// The collection of node pool specifications. Mutiple node pools can be defined with multiple node_pool blocks. The node pool block supports the following arguments:
+	// Define a node pool and its attributes.
 	NodePool []NodePoolInitParameters `json:"nodePool,omitempty" tf:"node_pool,omitempty"`
 
 	// Custom CA from customer in pem format as string.
@@ -79,27 +121,55 @@ type K8SInitParameters struct {
 	// DEPRECATED  Security zone UUID linked to the Kubernetes resource. If security_zone_uuid is not set, the default security zone will be created (if it doesn't exist) and linked. A change of this argument necessitates the re-creation of the resource.
 	// Security zone UUID linked to PaaS service.
 	SecurityZoneUUID *string `json:"securityZoneUuid,omitempty" tf:"security_zone_uuid,omitempty"`
+
+	// Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
+	// Enable surge node to avoid resources shortage during the cluster upgrade.
+	SurgeNode *bool `json:"surgeNode,omitempty" tf:"surge_node,omitempty"`
 }
 
 type K8SObservation struct {
+
+	// Enable Kubernetes audit logs.
+	AuditLogEnabled *bool `json:"auditLogEnabled,omitempty" tf:"audit_log_enabled,omitempty"`
+
+	// Audit log level.
+	AuditLogLevel *string `json:"auditLogLevel,omitempty" tf:"audit_log_level,omitempty"`
 
 	// Defines the date and time of the last object change.
 	// Time of the last change
 	ChangeTime *string `json:"changeTime,omitempty" tf:"change_time,omitempty"`
 
+	// (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
+	// The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
+	ClusterCidr *string `json:"clusterCidr,omitempty" tf:"cluster_cidr,omitempty"`
+
+	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+	ClusterTrafficEncryption *bool `json:"clusterTrafficEncryption,omitempty" tf:"cluster_traffic_encryption,omitempty"`
+
 	// The time the object was created.
 	// Time this service was created.
 	CreateTime *string `json:"createTime,omitempty" tf:"create_time,omitempty"`
 
-	// The gridscale's Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
+	// The gridscale's Kubernetes version of this instance (e.g. "1.30.3-gs0"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
 	// The gridscale k8s PaaS version (issued by gridscale) of this instance.
 	GskVersion *string `json:"gskVersion,omitempty" tf:"gsk_version,omitempty"`
 
+	// Enable hubble integration.
+	Hubble *bool `json:"hubble,omitempty" tf:"hubble,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// Enable Hubble for the k8s cluster.
+	// Enables Hubble Integration.
+	K8SHubble *bool `json:"k8sHubble,omitempty" tf:"k8s_hubble,omitempty"`
 
 	// Private network UUID which k8s nodes are attached to. It can be used to attach other PaaS/VMs.
 	// Private network UUID which k8s nodes are attached to. It can be used to attach other PaaS/VMs.
 	K8SPrivateNetworkUUID *string `json:"k8sPrivateNetworkUuid,omitempty" tf:"k8s_private_network_uuid,omitempty"`
+
+	// Enable kube-apiserver logs.
+	KubeApiserverLogEnabled *bool `json:"kubeApiserverLogEnabled,omitempty" tf:"kube_apiserver_log_enabled,omitempty"`
 
 	// List of labels in the format [ "label1", "label2" ].
 	// List of labels.
@@ -109,6 +179,24 @@ type K8SObservation struct {
 	// The port number where this k8s service accepts connections.
 	ListenPort []ListenPortObservation `json:"listenPort,omitempty" tf:"listen_port,omitempty"`
 
+	// Enable control plane log delivery.
+	LogDelivery *bool `json:"logDelivery,omitempty" tf:"log_delivery,omitempty"`
+
+	// Access key used to authenticate against Object Storage endpoint.
+	LogDeliveryAccessKey *string `json:"logDeliveryAccessKey,omitempty" tf:"log_delivery_access_key,omitempty"`
+
+	// Bucket to upload logs to.
+	LogDeliveryBucket *string `json:"logDeliveryBucket,omitempty" tf:"log_delivery_bucket,omitempty"`
+
+	// Object Storage endpoint URL the bucket is located on.
+	LogDeliveryEndpoint *string `json:"logDeliveryEndpoint,omitempty" tf:"log_delivery_endpoint,omitempty"`
+
+	// Time interval (in min), at which log files will be delivered, unless file size limit is reached first.
+	LogDeliveryInterval *float64 `json:"logDeliveryInterval,omitempty" tf:"log_delivery_interval,omitempty"`
+
+	// Secret key used to authenticate against Object Storage endpoint.
+	LogDeliverySecretKey *string `json:"logDeliverySecretKey,omitempty" tf:"log_delivery_secret_key,omitempty"`
+
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -117,8 +205,8 @@ type K8SObservation struct {
 	// Network UUID containing security zone
 	NetworkUUID *string `json:"networkUuid,omitempty" tf:"network_uuid,omitempty"`
 
-	// Node pool's specification. NOTE: The node pool's specification is not yet mutable (except node_count).
-	// Node pool's specification.
+	// The collection of node pool specifications. Mutiple node pools can be defined with multiple node_pool blocks. The node pool block supports the following arguments:
+	// Define a node pool and its attributes.
 	NodePool []NodePoolObservation `json:"nodePool,omitempty" tf:"node_pool,omitempty"`
 
 	// Custom CA from customer in pem format as string.
@@ -177,6 +265,10 @@ type K8SObservation struct {
 	// Current status of the service
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 
+	// Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
+	// Enable surge node to avoid resources shortage during the cluster upgrade.
+	SurgeNode *bool `json:"surgeNode,omitempty" tf:"surge_node,omitempty"`
+
 	// The amount of minutes the IP address has been in use.
 	// Number of minutes that PaaS service is in use
 	UsageInMinutes *float64 `json:"usageInMinutes,omitempty" tf:"usage_in_minutes,omitempty"`
@@ -184,10 +276,41 @@ type K8SObservation struct {
 
 type K8SParameters struct {
 
-	// The gridscale's Kubernetes version of this instance (e.g. "1.21.14-gs1"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
+	// Enable Kubernetes audit logs.
+	// +kubebuilder:validation:Optional
+	AuditLogEnabled *bool `json:"auditLogEnabled,omitempty" tf:"audit_log_enabled,omitempty"`
+
+	// Audit log level.
+	// +kubebuilder:validation:Optional
+	AuditLogLevel *string `json:"auditLogLevel,omitempty" tf:"audit_log_level,omitempty"`
+
+	// (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
+	// The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
+	// +kubebuilder:validation:Optional
+	ClusterCidr *string `json:"clusterCidr,omitempty" tf:"cluster_cidr,omitempty"`
+
+	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
+	// +kubebuilder:validation:Optional
+	ClusterTrafficEncryption *bool `json:"clusterTrafficEncryption,omitempty" tf:"cluster_traffic_encryption,omitempty"`
+
+	// The gridscale's Kubernetes version of this instance (e.g. "1.30.3-gs0"). Define which gridscale k8s version will be used to create the cluster. For convenience, please use gscloud to get the list of available gridscale k8s version. NOTE: Either gsk_version or release is set at a time.
 	// The gridscale k8s PaaS version (issued by gridscale) of this instance.
 	// +kubebuilder:validation:Optional
 	GskVersion *string `json:"gskVersion,omitempty" tf:"gsk_version,omitempty"`
+
+	// Enable hubble integration.
+	// +kubebuilder:validation:Optional
+	Hubble *bool `json:"hubble,omitempty" tf:"hubble,omitempty"`
+
+	// Enable Hubble for the k8s cluster.
+	// Enables Hubble Integration.
+	// +kubebuilder:validation:Optional
+	K8SHubble *bool `json:"k8sHubble,omitempty" tf:"k8s_hubble,omitempty"`
+
+	// Enable kube-apiserver logs.
+	// +kubebuilder:validation:Optional
+	KubeApiserverLogEnabled *bool `json:"kubeApiserverLogEnabled,omitempty" tf:"kube_apiserver_log_enabled,omitempty"`
 
 	// List of labels in the format [ "label1", "label2" ].
 	// List of labels.
@@ -195,13 +318,37 @@ type K8SParameters struct {
 	// +listType=set
 	Labels []*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
+	// Enable control plane log delivery.
+	// +kubebuilder:validation:Optional
+	LogDelivery *bool `json:"logDelivery,omitempty" tf:"log_delivery,omitempty"`
+
+	// Access key used to authenticate against Object Storage endpoint.
+	// +kubebuilder:validation:Optional
+	LogDeliveryAccessKey *string `json:"logDeliveryAccessKey,omitempty" tf:"log_delivery_access_key,omitempty"`
+
+	// Bucket to upload logs to.
+	// +kubebuilder:validation:Optional
+	LogDeliveryBucket *string `json:"logDeliveryBucket,omitempty" tf:"log_delivery_bucket,omitempty"`
+
+	// Object Storage endpoint URL the bucket is located on.
+	// +kubebuilder:validation:Optional
+	LogDeliveryEndpoint *string `json:"logDeliveryEndpoint,omitempty" tf:"log_delivery_endpoint,omitempty"`
+
+	// Time interval (in min), at which log files will be delivered, unless file size limit is reached first.
+	// +kubebuilder:validation:Optional
+	LogDeliveryInterval *float64 `json:"logDeliveryInterval,omitempty" tf:"log_delivery_interval,omitempty"`
+
+	// Secret key used to authenticate against Object Storage endpoint.
+	// +kubebuilder:validation:Optional
+	LogDeliverySecretKey *string `json:"logDeliverySecretKey,omitempty" tf:"log_delivery_secret_key,omitempty"`
+
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
 	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Node pool's specification. NOTE: The node pool's specification is not yet mutable (except node_count).
-	// Node pool's specification.
+	// The collection of node pool specifications. Mutiple node pools can be defined with multiple node_pool blocks. The node pool block supports the following arguments:
+	// Define a node pool and its attributes.
 	// +kubebuilder:validation:Optional
 	NodePool []NodePoolParameters `json:"nodePool,omitempty" tf:"node_pool,omitempty"`
 
@@ -264,6 +411,11 @@ type K8SParameters struct {
 	// Security zone UUID linked to PaaS service.
 	// +kubebuilder:validation:Optional
 	SecurityZoneUUID *string `json:"securityZoneUuid,omitempty" tf:"security_zone_uuid,omitempty"`
+
+	// Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
+	// Enable surge node to avoid resources shortage during the cluster upgrade.
+	// +kubebuilder:validation:Optional
+	SurgeNode *bool `json:"surgeNode,omitempty" tf:"surge_node,omitempty"`
 }
 
 type ListenPortInitParameters struct {
@@ -271,7 +423,7 @@ type ListenPortInitParameters struct {
 
 type ListenPortObservation struct {
 
-	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+	// Name of the node pool.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
@@ -282,14 +434,6 @@ type ListenPortParameters struct {
 
 type NodePoolInitParameters struct {
 
-	// (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
-	// The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
-	ClusterCidr *string `json:"clusterCidr,omitempty" tf:"cluster_cidr,omitempty"`
-
-	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
-	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
-	ClusterTrafficEncryption *bool `json:"clusterTrafficEncryption,omitempty" tf:"cluster_traffic_encryption,omitempty"`
-
 	// Cores per worker node.
 	// Cores per worker node.
 	Cores *float64 `json:"cores,omitempty" tf:"cores,omitempty"`
@@ -298,7 +442,7 @@ type NodePoolInitParameters struct {
 	// Memory per worker node (in GiB).
 	Memory *float64 `json:"memory,omitempty" tf:"memory,omitempty"`
 
-	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+	// Name of the node pool.
 	// Name of node pool.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -317,22 +461,10 @@ type NodePoolInitParameters struct {
 	// Storage type (one of storage, storage_high, storage_insane).
 	// Storage type.
 	StorageType *string `json:"storageType,omitempty" tf:"storage_type,omitempty"`
-
-	// Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
-	// Enable surge node to avoid resources shortage during the cluster upgrade.
-	SurgeNode *bool `json:"surgeNode,omitempty" tf:"surge_node,omitempty"`
 }
 
 type NodePoolObservation struct {
 
-	// (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
-	// The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
-	ClusterCidr *string `json:"clusterCidr,omitempty" tf:"cluster_cidr,omitempty"`
-
-	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
-	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
-	ClusterTrafficEncryption *bool `json:"clusterTrafficEncryption,omitempty" tf:"cluster_traffic_encryption,omitempty"`
-
 	// Cores per worker node.
 	// Cores per worker node.
 	Cores *float64 `json:"cores,omitempty" tf:"cores,omitempty"`
@@ -341,7 +473,7 @@ type NodePoolObservation struct {
 	// Memory per worker node (in GiB).
 	Memory *float64 `json:"memory,omitempty" tf:"memory,omitempty"`
 
-	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+	// Name of the node pool.
 	// Name of node pool.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -360,23 +492,9 @@ type NodePoolObservation struct {
 	// Storage type (one of storage, storage_high, storage_insane).
 	// Storage type.
 	StorageType *string `json:"storageType,omitempty" tf:"storage_type,omitempty"`
-
-	// Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
-	// Enable surge node to avoid resources shortage during the cluster upgrade.
-	SurgeNode *bool `json:"surgeNode,omitempty" tf:"surge_node,omitempty"`
 }
 
 type NodePoolParameters struct {
-
-	// (Immutable) The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If the cluster CIDR is not set, the cluster will use "10.244.0.0/16" as it default (even though the cluster_cidr in the k8s resource is empty).
-	// The cluster CIDR that will be used to generate the CIDR of nodes, services, and pods. The allowed CIDR prefix length is /16. If this field is empty, the default value is "10.244.0.0/16"
-	// +kubebuilder:validation:Optional
-	ClusterCidr *string `json:"clusterCidr,omitempty" tf:"cluster_cidr,omitempty"`
-
-	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
-	// Enables cluster encryption via wireguard if true. Only available for GSK version 1.29 and above. Default is false.
-	// +kubebuilder:validation:Optional
-	ClusterTrafficEncryption *bool `json:"clusterTrafficEncryption,omitempty" tf:"cluster_traffic_encryption,omitempty"`
 
 	// Cores per worker node.
 	// Cores per worker node.
@@ -388,7 +506,7 @@ type NodePoolParameters struct {
 	// +kubebuilder:validation:Optional
 	Memory *float64 `json:"memory" tf:"memory,omitempty"`
 
-	// The human-readable name of the object. It supports the full UTF-8 character set, with a maximum of 64 characters.
+	// Name of the node pool.
 	// Name of node pool.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name" tf:"name,omitempty"`
@@ -412,11 +530,6 @@ type NodePoolParameters struct {
 	// Storage type.
 	// +kubebuilder:validation:Optional
 	StorageType *string `json:"storageType" tf:"storage_type,omitempty"`
-
-	// Enable surge node to avoid resources shortage during the cluster upgrade (Default: true).
-	// Enable surge node to avoid resources shortage during the cluster upgrade.
-	// +kubebuilder:validation:Optional
-	SurgeNode *bool `json:"surgeNode,omitempty" tf:"surge_node,omitempty"`
 }
 
 // K8SSpec defines the desired state of K8S
