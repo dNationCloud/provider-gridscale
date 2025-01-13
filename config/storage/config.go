@@ -30,6 +30,7 @@ func Configure(p *config.Provider) {
 			TerraformName: "gridscale_sshkey",
 		}
 	})
+	p.AddResourceConfigurator("gridscale_isoimage", func(r *config.Resource) {})
 }
 
 // TODO: Implement timeout logic for the resources.

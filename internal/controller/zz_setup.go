@@ -12,6 +12,7 @@ import (
 	firewall "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/firewall"
 	ipv4 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv4"
 	ipv6 "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/ipv6"
+	isoimage "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/isoimage"
 	k8s "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/k8s"
 	loadbalancer "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/loadbalancer"
 	network "github.com/dNationCloud/provider-gridscale/internal/controller/gridscale/network"
@@ -31,6 +32,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		firewall.Setup,
 		ipv4.Setup,
 		ipv6.Setup,
+		isoimage.Setup,
 		k8s.Setup,
 		loadbalancer.Setup,
 		network.Setup,

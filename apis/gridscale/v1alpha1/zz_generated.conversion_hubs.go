@@ -16,6 +16,9 @@ func (tr *IPv4) Hub() {}
 func (tr *IPv6) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *Isoimage) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *K8S) Hub() {}
 
 // Hub marks this type as a conversion hub.
